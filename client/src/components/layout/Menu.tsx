@@ -31,7 +31,7 @@ export default function Menu({ vertical }: Props) {
           className="text-slate-300"
         />
       ))}
-      {user && <li onClick={handleLogOut}><FaUserCircle/></li>}
+      {user && <li onClick={handleLogOut}><FaUserCircle color="white"/></li>}
       {!user && <AppLink name="Login" path="/login"
           className="text-slate-300" />}
     </ul>

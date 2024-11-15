@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import ProyectsPage from "../pages/ProyectsPage";
 import Login from "../pages/Login";
 import PrivateRoute from "./PrivateRoute";
+import Error404 from "../pages/Error404";
 
 export default function AppRoutes() {
   return (
@@ -15,6 +16,7 @@ export default function AppRoutes() {
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<Login />} />
       </Route>
+      <Route path="*" element={<Error404 />} />
     </Routes>
   );
 }

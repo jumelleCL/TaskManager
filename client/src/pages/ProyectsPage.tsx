@@ -20,7 +20,7 @@ export default function ProyectsPage() {
     const controller = new AbortController();
 
     axiosApi
-      .get("/proyects.json", { signal: controller.signal })
+      .get("/api", { signal: controller.signal })
       .then((resp) => {
         console.log(resp);
 
