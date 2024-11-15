@@ -1,21 +1,18 @@
 import { FaPlus, FaPlusCircle, FaUserCircle } from "react-icons/fa";
 import { useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
+import { Proyects } from "../types";
 
-type Proyects = {
-  id?: number;
-  titul?: string;
-  descripcio?: string;
-  endDate?: string;
+type ProyectsCard = Proyects & {
   newProyect?: boolean;
 };
 
-export default function Proyect({
-  titul,
-  descripcio,
+export default function ProyectCard({
+  name: titul,
+  description: descripcio,
   newProyect,
-  endDate,
-}: Proyects) {
+  end_date: endDate,
+}: ProyectsCard) {
   const calculateDaysLeft = (endDate: string) => {
     const currentDate = new Date();
     const endDateObj = new Date(Date.parse(endDate));

@@ -3,8 +3,11 @@ import Input from "../design/Input";
 import Button from "../design/Button";
 import { useForm } from "react-hook-form";
 import { forwardRef, useRef } from "react";
+import Select from "../design/Select";
+import { Teams } from "../../types";
 
 type Props = {
+  teams: Teams[];
   className?: string;
 };
 type FormValues = {
@@ -13,9 +16,9 @@ type FormValues = {
 };
 
 const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
-  { className }: Props,
+  { teams, className }: Props,
   externalRef
-) {
+) {  
   const { register, handleSubmit, formState } = useForm<FormValues>({
     mode: "onChange",
   });
@@ -33,9 +36,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
   return (
     <dialog
       ref={refToUse}
-      className={`bg-slate-300 text-slate-600 p-4 rounded-lg min-w-80 flex-col gap-4 ${
-        refToUse.current?.hasAttribute("open") && "flex"
-      } ${className}`}
+      className={`bg-slate-300 text-slate-600 p-4 rounded-lg min-w-80 flex-col gap-4 ${className}`}
     >
       <div className="flex justify-between items-center">
         <h3 className="font-bold">Crear Proyecto</h3>
@@ -73,8 +74,8 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
           type="text"
           label="Descripción"
           maxLength={50}
-          {...register("titul", {
-            required: "titulo requerido",
+          {...register("descripcion", {
+            required: "descripcion requerido",
             minLength: {
               value: 3,
               message: "Mínimo 3 caracteres",
@@ -85,6 +86,11 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
             },
           })}
         />
+        <Select label="Equipo">{
+          teams.map((team) => (
+            <option key={team.id} value={team.id}>{team.name}</option>
+          ))
+        }</Select>
         <Button
           disabled={!isValid}
           type="submit"
