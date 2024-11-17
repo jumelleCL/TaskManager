@@ -8,7 +8,7 @@ function App() {
     <div className="flex flex-col min-h-screen w-screen">
       <UserProvider>
       <Header />
-        <main className="flex-grow flex items-center justify-center w-full h-min-[calc(100vh-72px-48px)] overflow-hidden">
+        <main className="flex-grow flex items-center justify-center w-full overflow-hidden">
           <AppRoutes />
         </main>
       </UserProvider>
