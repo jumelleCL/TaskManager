@@ -54,7 +54,6 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
         className="flex flex-col gap-1 text-slate-700"
       >
         <Input
-          error={errors.titul}
           type="text"
           label="Título"
           {...register("titul", {
@@ -86,11 +85,11 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
             },
           })}
         />
-        <Select label="Equipo">{
+        {/* <Select label="Equipo">{
           teams.map((team) => (
             <option key={team.id} value={team.id}>{team.name}</option>
           ))
-        }</Select>
+        }</Select> */}
         <Button
           disabled={!isValid}
           type="submit"
