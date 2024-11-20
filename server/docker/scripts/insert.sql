@@ -10,10 +10,3 @@ INSERT INTO Team_Members(team_id, user_id) VALUES(1, 1);
 INSERT INTO Team_Members(team_id, user_id) VALUES(1, 3);
 INSERT INTO Team_Members(team_id, user_id) VALUES(2, 2);
 INSERT INTO Team_Members(team_id, user_id) VALUES(2, 4);
-
-
-INSERT INTO Projects(team_id, name, description, end_date) VALUES(1, 'proyect lorem', 'lorem', '2024-11-30 16:54:41.918');
-INSERT INTO Projects(team_id, name, description, end_date) VALUES(1, 'proyect lorem', 'lorem', '2024-11-30 16:54:41.918');
-INSERT INTO Projects(team_id, name, description, end_date) VALUES(1, 'proyect lorem', 'lorem', '2024-11-30 16:54:41.918');
-INSERT INTO Projects(team_id, name, description, end_date) VALUES(1, 'proyect lorem', 'lorem', '2024-11-30 16:54:41.918');
-INSERT INTO Projects(team_id, name, description, end_date) VALUES(1, 'proyect lorem', 'lorem', '2024-11-30 16:54:41.918');

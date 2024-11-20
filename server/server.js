@@ -18,6 +18,7 @@ const pool = new Pool({
 // factory(pool);
 
 app.use(cors());
+app.use(express.json());
 
 /**
  * Devuelve todos los proyectos existentes
@@ -31,38 +32,6 @@ app.get("/api/projects", async (req, res) => {
     res.status(500).json({ error: "Error al obtener proyectos" });
   }
 });
-
-/**
- * Para crear un proyecto nuevo
- * Dar todos los datos de la tabla
- * team_id, name, description, end_date, start_date(optional)
- */
-app.post(
-  "/api/projects",
-  async (
-    req,
-    res,
-    team_id,
-    name_proyect,
-    description,
-    start_date,
-    end_date
-  ) => {
-    try {
-      await pool.query("BEGIN");
-      const qryText =
-        "INSERT INTO proyects() VALUES($team_id, $name, $descripction, $start_date, $end_date, $created_at) RETURNING id";
-      const values = [team_id, name_proyect, description, start_date, end_date];
-
-      await pool.query(qryText, values);
-      await pool.query("COMMIT");
-    } catch (error) {
-      console.error("Error al obtener proyectos:", error);
-      await pool.query("ROLLBACK");
-      res.status(500).json({ error: "Error al obtener proyectos" });
-    }
-  }
-);
 
 /**
  * Te devuelve todos los equipos existentes
@@ -80,25 +49,43 @@ app.get("/api/teams", async (req, res) => {
 /**
  * Crea un registro en projects, necesita que le pases todos los datos
  */
-async function createProyect( team_id, name, description, start_date, end_date ) {
-  await pool.query("BEGIN");
-  const query = `
+async function createProyect(team_id, name, description, start_date, end_date) {
+  try {
+    await pool.query("BEGIN");
+    const query = `
     INSERT INTO projects (name, description, team_id, start_date, end_date)
     VALUES ($1, $2, $3, $4, $5) 
     RETURNING id`;
-  const values = [name, description, team_id, start_date, end_date];
-  await pool.query(query, values);
-  await pool.query("COMMIT");
-}
+    const values = [name, description, team_id, start_date, end_date];
+    await pool.query(query, values);
+    await pool.query("COMMIT");
 
+    const result = await pool.query(
+      `SELECT * FROM projects WHERE name = $1 AND team_id = $2 AND start_date = $3`,
+      [name, team_id, start_date]
+    );
+    return result;
+  } catch (e) {
+    await pool.query("ROLLBACK");
+    console.error(e);
+  }
+}
 /**
- * Te deve devolver un proyecto cuya id pases
+ * Para crear un proyecto nuevo
+ * Dar todos los datos de la tabla
+ * team_id, name, description, end_date, start_date(optional)
  */
-app.get("/api/projects/:team_id/:name/:description/:start_end/:end_date", async (req, res) => {
-  const { team_id, name, description, start_date, end_date } = req.params;
+app.post("/api/project", async (req, res) => {
+  const { team_id, name, description, start_date, end_date } = req.body;
   try {
-    const result = createProyect(team_id, name, description, start_date, end_date)
-    res.json(result.rows[0]);
+    const result = await createProyect(
+      team_id,
+      name,
+      description,
+      start_date,
+      end_date
+    );
+    res.json(result);
   } catch (error) {
     console.error("Error al obtener proyecto:", error);
     res.status(500).json({ error: "Error al obtener proyecto" });
@@ -115,11 +102,10 @@ app.get("/api/user/:user/:psw", async (req, res) => {
     const result = await pool.query(
       "select password from users where name = $1",
       [user]
-    );  
-    
+    );
+
     if (result.rows[0]) {
       const match = await bcrypt.compare(psw, result.rows[0].password);
-      console.log(match); 
       res.json(match);
     }
   } catch (e) {

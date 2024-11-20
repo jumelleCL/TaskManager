@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 type SelectProps = {
@@ -7,16 +8,18 @@ type SelectProps = {
   theme?: "light" | "dark";
 };
 
-export default function Select({
+const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select({
   children,
   className,
   theme,
   label,
   ...rest
-}: SelectProps) {
+}: SelectProps, ref) {
   const styles = twMerge('flex p-2 text-base border rounded-md', className)
   return (
     <select
+      ref={ref}
+      defaultValue={label}
       {...rest}
       className={` ${
         theme === "light"
@@ -24,8 +27,10 @@ export default function Select({
           : "bg-gray-800 text-white border-gray-700"
       } ${styles}`}
     >
-      {label && (<option disabled selected>Equipo</option>)}
+      {label && (<option disabled>{label}</option>)}
       {children}
     </select>
   );
-}
+})
+
+export default Select;

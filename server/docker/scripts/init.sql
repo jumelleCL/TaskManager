@@ -33,7 +33,7 @@ CREATE TABLE Projects (
     team_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    start_date DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified_at DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,

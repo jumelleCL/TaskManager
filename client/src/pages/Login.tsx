@@ -15,9 +15,7 @@ export default function Login() {
     const password = pswRef.current?.value;
     axiosApi
       .get(`/api/user/${name}/${password}`)
-      .then((resp) => {     
-        console.log(resp);
-        
+      .then((resp) => {    
         if (resp.data && name) {
             const user: User = {
                 user: name,
