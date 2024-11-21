@@ -1,9 +1,10 @@
 import { useRef } from "react";
-import Button from "../components/design/Button";
-import Input from "../components/design/Input";
-import { User } from "../context/UserProvider";
-import useUserContext from "../hooks/UseUserContext";
-import axiosApi from "../config/axiosApi";
+import Button from "../design/Button";
+import Input from "../design/Input";
+import { User } from "../../context/UserProvider";
+import useUserContext from "../../hooks/UseUserContext";
+import axiosApi from "../../config/axiosApi";
+
 
 export default function Login() {
   const userContext = useUserContext();
@@ -11,21 +12,22 @@ export default function Login() {
   const pswRef = useRef<HTMLInputElement | null>(null);
   function handleLogin(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault()
-    const name = inputRef.current?.value;
-    const password = pswRef.current?.value;
+    const data = {
+      user: inputRef.current?.value,
+      password: pswRef.current?.value,
+    };
     axiosApi
-      .get(`/api/user/${name}/${password}`)
-      .then((resp) => {    
-        if (resp.data && name) {
+      .post("/api/login", data)
+      .then((resp) => {
+        if (resp.data && data.user) {
             const user: User = {
-                user: name,
+                user: data.user,
             };
             userContext.logIn(user);
         }else return
 
       }).catch((err) => {
-        console.log(err);
-        
+        console.error(err.response.data.error);
       })
   }
   return (

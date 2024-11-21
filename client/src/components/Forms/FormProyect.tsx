@@ -10,6 +10,7 @@ import axiosApi from "../../config/axiosApi";
 type Props = {
   teams: Teams[];
   className?: string;
+  onProyectCreated?: () => void;
 };
 type FormValues = {
   titul: string;
@@ -17,7 +18,7 @@ type FormValues = {
 };
 
 const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
-  { teams, className }: Props,
+  { teams, className, onProyectCreated}: Props,
   externalRef
 ) {
   const { register, handleSubmit, formState, watch } = useForm<FormValues>({
@@ -50,8 +51,9 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
     axiosApi
       .post("/api/project", data)
       .then((resp) => {
-        if (resp.data) {          
+        if (resp.data) {
           refToUse.current?.close();
+          if(onProyectCreated) onProyectCreated()
         } else return;
       })
       .catch((e) => {

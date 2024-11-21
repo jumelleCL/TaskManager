@@ -1,10 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import PublicRoute from "./PublicRoute";
-import Home from "../pages/Home";
-import ProyectsListPage from "../pages/ProyectsListPage";
-import Login from "../pages/Login";
-import PrivateRoute from "./PrivateRoute";
-import Error404 from "../pages/Error404";
+import {Home, PrivateRoute, ProyectsListPage, PublicRoute, Login, Register, Error404} from './Routes'
 
 export default function AppRoutes() {
   return (
@@ -15,6 +10,7 @@ export default function AppRoutes() {
       </Route>
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register/>} />
       </Route>
       <Route path="*" element={<Error404 />} />
     </Routes>

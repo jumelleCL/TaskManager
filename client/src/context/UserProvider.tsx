@@ -13,13 +13,16 @@ type Props = {
     children: ReactNode
 }
 export default function UserProvider ({children}: Props){
-    const [user, setUser] = useState<User|null>(null)
+    let getUser:User | null={ user: localStorage.getItem('user') || ''}
+    if(!getUser.user) getUser=null;
+    const [user, setUser] = useState<User|null>(getUser || null)
 
     function logIn(user: User){
-        //buscar en la bd?
+        localStorage.setItem('user', user.user)
         setUser(user)
     }
     function logOut(){
+        localStorage.removeItem('user')
         setUser(null)
     }
 

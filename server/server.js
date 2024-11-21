@@ -96,21 +96,56 @@ app.post("/api/project", async (req, res) => {
  * verifica el inicio de sesion
  * devolvera un true o false
  */
-app.get("/api/user/:user/:psw", async (req, res) => {
-  const { user, psw } = req.params;
+app.post("/api/login", async (req, res) => {
+  const { user, password } = req.body;
   try {
     const result = await pool.query(
       "select password from users where name = $1",
       [user]
-    );
-
+    );  
     if (result.rows[0]) {
-      const match = await bcrypt.compare(psw, result.rows[0].password);
-      res.json(match);
+      const match = await bcrypt.compare(password, result.rows[0].password);
+      console.log(match);
+      
+      if(match) res.json(match)
+        else res.status(500).json({error: 'Credenciales invalidas.'})
     }
   } catch (e) {
     console.error("error al  encontrar user", e);
     res.status(500).json({ error: "Error al encontrar el usuario" });
+  }
+});
+
+async function createUser(user, password, email, role = 'member') {
+  try {
+    await pool.query("BEGIN");
+    const query = `
+    INSERT INTO users (name, password, email, role)
+    VALUES ($1, $2, $3, $4) 
+    RETURNING id`;
+    const pswHash = await bcrypt.hashSync(password, 10);
+        
+    const values = [user, pswHash, email, role];
+    await pool.query(query, values);
+    await pool.query("COMMIT");
+
+    const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [
+      email
+    ]);
+    return result;
+  } catch (e) {
+    await pool.query("ROLLBACK");
+    console.error(e);
+  }
+}
+
+app.post("/api/register", async (req, res) => {
+  const { user, password: psw, email} = req.body;
+  try {
+    const result = await createUser(user, psw, email);
+    res.json(result);
+  } catch (e) {
+    console.error(e);
   }
 });
 

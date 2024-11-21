@@ -11,19 +11,20 @@ export default function ProyectsListPage() {
   // Agarrar proyectos
   const [proyects, setProyects] = useState<Proyects[]>([]);
   const [teams, setTeams] = useState<Teams[]>([]);
-  useEffect(() => {
-    const controller = new AbortController();
 
+  const fetchProjects = () => {
     axiosApi
-      .get("/api/projects", { signal: controller.signal })
+      .get("/api/projects")
       .then((resp) => {
         setProyects(Array.isArray(resp.data) ? resp.data : []);
       })
       .catch((err) => {
-        if (err instanceof CanceledError) return;
         console.error(err);
-      }); 
-
+      });
+  };
+  useEffect(() => {
+    const controller = new AbortController(); 
+    fetchProjects();
     axiosApi
       .get("/api/teams", { signal: controller.signal })
       .then((resp) => {
@@ -43,7 +44,7 @@ export default function ProyectsListPage() {
         <h1 className="text-slate-900 font-bold text-shadow">Mis proyectos</h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 gap-10 p-8 w-full">
-        <FormProyect ref={dialogRef} teams={teams}/>
+        <FormProyect ref={dialogRef} teams={teams} onProyectCreated={fetchProjects}/>
         <button onClick={() => dialogRef.current?.showModal()}>
           <ProyectCard newProyect />
         </button>
