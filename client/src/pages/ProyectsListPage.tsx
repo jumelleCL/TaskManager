@@ -4,6 +4,7 @@ import axiosApi from "../config/axiosApi";
 import FormProyect from "../components/Forms/FormProyect";
 import ProyectCard from "../components/ProyectCard";
 import { Proyects, Teams } from "../types";
+import { NavLink } from "react-router-dom";
 
 export default function ProyectsListPage() {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -49,12 +50,14 @@ export default function ProyectsListPage() {
           <ProyectCard newProyect />
         </button>
         {proyects.map((proyect) => (
-          <ProyectCard
-            key={proyect.id}
-            name={proyect.name}
-            description={proyect.description}
-            end_date={proyect.end_date}
-          />
+          <NavLink key={proyect.id} to={'/proyect/' + proyect.id}>
+            <ProyectCard
+              key={proyect.id}
+              name={proyect.name}
+              description={proyect.description}
+              end_date={proyect.end_date}
+            />
+          </NavLink>
         ))}
       </div>
     </div>

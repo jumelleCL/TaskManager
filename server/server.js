@@ -70,6 +70,28 @@ async function createProyect(team_id, name, description, start_date, end_date) {
     console.error(e);
   }
 }
+
+app.get("/api/project", async (req, res) => {
+  const { id } = req.query;
+
+  try {
+    const resultProject = await pool.query(
+    `select * from projects
+      where id = $1`,
+    [id]
+  );
+    const resultTask = await pool.query(
+      `select * from tasks
+        where project_id = $1`,
+      [id]
+    );
+    res.json({project: resultProject.rows[0], tasks: resultTask.rows});
+  } catch (e) {
+    console.error(e);
+    res.status(404).json({ error: "No se encuentra dicho proyecto" });
+  }
+});
+
 /**
  * Para crear un proyecto nuevo
  * Dar todos los datos de la tabla
@@ -102,13 +124,13 @@ app.post("/api/login", async (req, res) => {
     const result = await pool.query(
       "select password from users where name = $1",
       [user]
-    );  
+    );
     if (result.rows[0]) {
       const match = await bcrypt.compare(password, result.rows[0].password);
       console.log(match);
-      
-      if(match) res.json(match)
-        else res.status(500).json({error: 'Credenciales invalidas.'})
+
+      if (match) res.json(match);
+      else res.status(500).json({ error: "Credenciales invalidas." });
     }
   } catch (e) {
     console.error("error al  encontrar user", e);
@@ -116,7 +138,7 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-async function createUser(user, password, email, role = 'member') {
+async function createUser(user, password, email, role = "member") {
   try {
     await pool.query("BEGIN");
     const query = `
@@ -124,13 +146,13 @@ async function createUser(user, password, email, role = 'member') {
     VALUES ($1, $2, $3, $4) 
     RETURNING id`;
     const pswHash = await bcrypt.hashSync(password, 10);
-        
+
     const values = [user, pswHash, email, role];
     await pool.query(query, values);
     await pool.query("COMMIT");
 
     const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [
-      email
+      email,
     ]);
     return result;
   } catch (e) {
@@ -140,7 +162,7 @@ async function createUser(user, password, email, role = 'member') {
 }
 
 app.post("/api/register", async (req, res) => {
-  const { user, password: psw, email} = req.body;
+  const { user, password: psw, email } = req.body;
   try {
     const result = await createUser(user, psw, email);
     res.json(result);
