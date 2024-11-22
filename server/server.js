@@ -70,6 +70,10 @@ async function createProyect(team_id, name, description, start_date, end_date) {
     console.error(e);
   }
 }
+/**
+ * Dandole la id de un projecto te devuelve 
+ * la info del projecto y todas las tareas que tiene el projecto
+ */
 
 app.get("/api/project", async (req, res) => {
   const { id } = req.query;
@@ -138,6 +142,11 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+/**
+ * Función para crear un usuario
+ * necesita que le des el
+ * username, password, email, (role? opcional)
+ */
 async function createUser(user, password, email, role = "member") {
   try {
     await pool.query("BEGIN");
@@ -161,6 +170,10 @@ async function createUser(user, password, email, role = "member") {
   }
 }
 
+/**
+ * Te registra/crea el usuario
+ * se necesita pasarle usename, password, email
+ */
 app.post("/api/register", async (req, res) => {
   const { user, password: psw, email } = req.body;
   try {
@@ -172,7 +185,3 @@ app.post("/api/register", async (req, res) => {
 });
 
 app.listen(5000, () => console.log("Server running on port 5000"));
-
-// bcrypt.hash('123', 10, function (err, hash) {
-//   console.log(hash);
-// })
