@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server",
-    "dev": "nodemon server"
+    "start": "node ./dist/server.js",
+    "dev": "tsx --watch server.ts",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -14,11 +14,16 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.1",
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "typescript": "^5.7.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.2.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/pg": "^8.11.10",
     "bcrypt": "^5.1.1",
-    "nodemon": "^3.1.7"
+    "tsx": "^4.19.2"
   }
 }

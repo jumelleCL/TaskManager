@@ -1,10 +1,13 @@
-const express = require("express");
-const cors = require("cors");
-const bcrypt = require("bcrypt");
-const { Pool } = require("pg");
-// const { factory } = require("./faker-factory");
+import { Request, Response, NextFunction } from "express";
+import express from 'express';
+import cors from 'cors';
+import bcrypt from 'bcrypt'
+import {Pool} from 'pg';
 
 const app = express();
+
+app.use(cors());
+app.use(express.json());
 
 // Configuración de la base de datos
 const pool = new Pool({
@@ -15,15 +18,10 @@ const pool = new Pool({
   port: 5432,
 });
 
-// factory(pool);
-
-app.use(cors());
-app.use(express.json());
-
 /**
  * Devuelve todos los proyectos existentes
  */
-app.get("/api/projects", async (req, res) => {
+app.get("/api/projects", async (req: Request, res: Response) => {
   try {
     const result = await pool.query("SELECT * FROM projects");
     res.json(result.rows);
@@ -36,7 +34,7 @@ app.get("/api/projects", async (req, res) => {
 /**
  * Te devuelve todos los equipos existentes
  */
-app.get("/api/teams", async (req, res) => {
+app.get("/api/teams", async (req: Request, res: Response) => {
   try {
     const result = await pool.query("SELECT * FROM teams");
     res.json(result.rows);
@@ -49,7 +47,7 @@ app.get("/api/teams", async (req, res) => {
 /**
  * Crea un registro en projects, necesita que le pases todos los datos
  */
-async function createProyect(team_id, name, description, start_date, end_date) {
+async function createProyect(team_id: number, name: string, description: string, start_date: Date, end_date: Date) {
   try {
     await pool.query("BEGIN");
     const query = `
@@ -75,7 +73,7 @@ async function createProyect(team_id, name, description, start_date, end_date) {
  * la info del projecto y todas las tareas que tiene el projecto
  */
 
-app.get("/api/project", async (req, res) => {
+app.get("/api/project", async (req: Request, res: Response) => {
   const { id } = req.query;
 
   try {
@@ -101,7 +99,7 @@ app.get("/api/project", async (req, res) => {
  * Dar todos los datos de la tabla
  * team_id, name, description, end_date, start_date(optional)
  */
-app.post("/api/project", async (req, res) => {
+app.post("/api/project", async (req: Request, res: Response) => {
   const { team_id, name, description, start_date, end_date } = req.body;
   try {
     const result = await createProyect(
@@ -122,7 +120,7 @@ app.post("/api/project", async (req, res) => {
  * verifica el inicio de sesion
  * devolvera un true o false
  */
-app.post("/api/login", async (req, res) => {
+app.post("/api/login", async (req: Request, res: Response) => {
   const { user, password } = req.body;
   try {
     const result = await pool.query(
@@ -147,7 +145,7 @@ app.post("/api/login", async (req, res) => {
  * necesita que le des el
  * username, password, email, (role? opcional)
  */
-async function createUser(user, password, email, role = "member") {
+async function createUser(user: string, password: string, email: string, role = "member") {
   try {
     await pool.query("BEGIN");
     const query = `
@@ -174,7 +172,7 @@ async function createUser(user, password, email, role = "member") {
  * Te registra/crea el usuario
  * se necesita pasarle usename, password, email
  */
-app.post("/api/register", async (req, res) => {
+app.post("/api/register", async (req: Request, res: Response) => {
   const { user, password: psw, email } = req.body;
   try {
     const result = await createUser(user, psw, email);
