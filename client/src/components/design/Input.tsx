@@ -6,17 +6,18 @@ type Props = ComponentProps<"input"> & {
   type?: string;
   className?: string;
   label?: string;
+  validate?: boolean;
   placeholder?: string;
   error?: FieldError | undefined;
 };
 
 const Input = forwardRef<HTMLInputElement, Props>(function Input(
-  { type, className, label, placeholder, error, ...rest }: Props,
+  { type, className, label, placeholder, validate, error, ...rest }: Props,
   ref
 ) {
   const id = useId();
   return (
-    <div className="relative mb-5">
+    <div className={`relative ${(validate ? 'mb-5' : 'm-0')}`}>
       <InputStyled className={`${className} rounded relative text-slate-700`}>
         <input ref={ref} id={id} type={type} required {...rest} />
         {(label || placeholder) && (
@@ -40,7 +41,6 @@ export default Input;
 const InputStyled = styled.div`
   position: relative;
   overflow: hidden;
-  margin-bottom: 10px;
   width: 100%;
 
   input {

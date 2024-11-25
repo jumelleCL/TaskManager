@@ -15,17 +15,15 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select({
   label,
   ...rest
 }: SelectProps, ref) {
-  const styles = twMerge('flex p-2 text-base border rounded-md', className)
+  const styles = twMerge(theme === "light"
+    ? "bg-gray-100 text-black border-gray-300"
+    : "bg-gray-800 text-white border-gray-700",'flex p-2 text-base border rounded-md', className)
   return (
     <select
       ref={ref}
       defaultValue={label}
       {...rest}
-      className={` ${
-        theme === "light"
-          ? "bg-gray-100 text-black border-gray-300"
-          : "bg-gray-800 text-white border-gray-700"
-      } ${styles}`}
+      className={`${styles}`}
     >
       {label && (<option disabled>{label}</option>)}
       {children}

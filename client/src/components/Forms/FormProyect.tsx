@@ -49,7 +49,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
       end_date: end_date,
     };
     axiosApi
-      .post("/api/project", data)
+      .post("/api/projects", data)
       .then((resp) => {
         if (resp.data) {
           refToUse.current?.close();
@@ -82,6 +82,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
       >
         <Input
           error={errors.titul}
+          validate
           type="text"
           label="Título"
           maxLength={10}
@@ -99,6 +100,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
         />
         <Input
           error={errors.descripcion}
+          validate
           type="text"
           label="Descripción"
           maxLength={50}
