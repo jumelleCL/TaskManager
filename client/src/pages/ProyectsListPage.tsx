@@ -11,13 +11,23 @@ import Select from "../components/design/Select";
 export default function ProyectsListPage() {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
+  // Busqueda
+  const searchRef = useRef<HTMLInputElement>(null);
+  const [search, setSearch] = useState<string>('');
+
   // Agarrar proyectos y equipos
   const [proyects, setProyects] = useState<Proyects[]>([]);
   const [teams, setTeams] = useState<Teams[]>([]);
 
+  const searchProject = () => {
+    const value = searchRef.current?.value  
+    if(value) setSearch(value);
+    else setSearch('')
+  }
+  
   const fetchProjects = () => {
     axiosApi
-      .get("/api/projects")
+      .get("/api/projects", { params: {search: search}})
       .then((resp) => {
         setProyects(Array.isArray(resp.data) ? resp.data : []);
       })
@@ -29,7 +39,7 @@ export default function ProyectsListPage() {
     const controller = new AbortController();
     fetchProjects();
     axiosApi
-      .get("/api/teams", { signal: controller.signal })
+      .get("/api/teams", {signal: controller.signal})
       .then((resp) => {
         setTeams(Array.isArray(resp.data) ? resp.data : []);
       })
@@ -39,18 +49,15 @@ export default function ProyectsListPage() {
       });
 
     return () => controller.abort();
-  }, []);
+  }, [search]);
 
   return (
     <div className="flex flex-col my-10 w-full items-center">
-      <div>
-        <h1 className="text-slate-900 font-bold text-shadow">Mis proyectos</h1>
-      </div>
-      <div className="w-full text-slate-700 grid grid-cols-4 max-h-fit">
-        <div className="col-start-1 col-end-4 min-h-full">
-          <Input label="search" />
+      <div className="w-full text-slate-700 grid grid-cols-4 px-10">
+        <div className="col-start-1 col-end-4">
+          <Input ref={searchRef} label="search" onChange={searchProject}/>
         </div>
-        <Select label="Equipo" className="text-slate-700" theme="light">
+        <Select label="Equipo" className="text-slate-700 rounded-l-none" theme="light">
           {teams.map((team) => (
             <option key={team.id} value={team.id}>
               {team.name}

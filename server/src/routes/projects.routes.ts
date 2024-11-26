@@ -9,10 +9,19 @@ const projectRouter = express.Router()
  * Devuelve todos los proyectos existentes
  */
 projectRouter.get("/", async (req, res) => {
+    const search = req.query.search;
+    
     try {
-        const result = await pool.query("SELECT * FROM projects");
+        let result;
+        if (search) {
+            result = await pool.query("SELECT * FROM projects p WHERE p.name LIKE '%' ||  $1 || '%'", [search])
+        } else {
+            result = await pool.query("SELECT * FROM projects");
+        }
         res.json(result.rows);
     } catch (error) {
+        console.log(error);
+        
         throw new HttpError(404, 'No se encuentran projectos')
     }
 });

@@ -3,7 +3,6 @@ import express from 'express';
 import 'express-async-errors';
 import morgan from 'morgan';
 import cors from 'cors';
-import { Pool } from 'pg';
 import HttpError from "./models/HttpError";
 import * as routes from './routes/routes'
 
