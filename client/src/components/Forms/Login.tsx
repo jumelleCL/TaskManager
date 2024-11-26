@@ -17,7 +17,7 @@ export default function Login() {
       password: pswRef.current?.value,
     };
     axiosApi
-      .post("/api/login", data)
+      .post("/api/users/login", data)
       .then((resp) => {
         if (resp.data && data.user) {
             const user: User = {
@@ -36,8 +36,8 @@ export default function Login() {
         Login
       </h2>
       <form className="flex flex-col justify-center">
-        <Input ref={inputRef} label="Username" type="text" />
-        <Input ref={pswRef} label="Password" type="password" />
+        <Input validate ref={inputRef} label="Username" type="text" />
+        <Input validate ref={pswRef} label="Password" type="password" />
         <Button onClick={handleLogin} type="submit" text="Log In" />
       </form>
     </div>

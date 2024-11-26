@@ -1,16 +1,8 @@
 import express from "express";
-import { Pool } from "pg";
+import pool from "../Pool";
 import HttpError from "../models/HttpError";
 const projectRouter = express.Router()
 
-
-const pool = new Pool({
-    user: "admin",
-    host: "localhost",
-    database: "taskManager_db",
-    password: "1234",
-    port: 5432,
-});
 //* PROJECTOS
 
 /**

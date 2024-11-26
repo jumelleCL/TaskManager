@@ -18,7 +18,7 @@ export default function Register() {
       email: emailRef.current?.value,
     }
     axiosApi
-      .post(`/api/register`, data)
+      .post(`/api/users/register`, data)
       .then((resp) => {    
         if (resp.data && data.user) {
             const user: User = {
