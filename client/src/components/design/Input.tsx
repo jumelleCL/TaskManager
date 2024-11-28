@@ -27,7 +27,7 @@ const Input = forwardRef<HTMLInputElement, Props>(function Input(
         )}
       </InputStyled>
       {error && (
-        <span className="absolute text-red-400 text-sm top-full left-0 w-full">
+        <span className="absolute text-red-700 text-sm top-full left-0 w-full">
           {error.message}
         </span>
       )}

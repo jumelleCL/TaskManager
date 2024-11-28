@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import HttpError from "./models/HttpError";
 import * as routes from './routes/routes'
+import ValidationError from "./models/ValidationError";
 
 const app = express();
 
@@ -29,6 +30,9 @@ app.use((req, res) => {
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
   if (error instanceof HttpError) {
     res.status(error.statusCode).send({ message: error.message })
+  }
+  if (error instanceof ValidationError){
+    res.status(400).send({message: error.errors})
   }
 })
 app.listen(5000, () => console.log("Server running on port 5000"));

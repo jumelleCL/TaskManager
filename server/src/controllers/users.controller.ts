@@ -1,44 +1,62 @@
 import { RequestHandler } from "express";
-import userModel from "../models/user.model";
 import bcrypt from 'bcrypt'
+import { eq } from "drizzle-orm";
 import HttpError from "../models/HttpError";
 import db from "../Pool";
+import { users } from "../db/schema";
+import { AddUserSchema, LoginSchema } from "../../../schemas/userSchemas";
+import ValidationError from "../models/ValidationError";
 
 const addUser: RequestHandler = async (req, res, next) => {
-    const { user, password: psw, email } = req.body;
-    console.log('a')
+    const user = req.body;
+    console.log(user)
+    const { success, data, error } = AddUserSchema.safeParse(user)
+    if (!success) throw new ValidationError(error)
+    const { username: name, password: psw, email } = data;
+
+    const userExists = await db.select().from(users).where(eq(users.email, email))
+    if(userExists) throw new HttpError(400, 'Hay algún error en los campos')
     try {
-        const password = bcrypt.hash(psw, 10)
-        console.log('b')
-        try {
-            const result = await db.insert(user).values({user: user, psw: password, email: email}) // userModel.createUser(user, psw, email);
-            
-        } catch (e) {
-            console.error(e)
-        
-        }
-        console.log('c')
+
+        type newUser = typeof users.$inferInsert;
+
+        const password = await bcrypt.hash(psw, 10)
+        const values: newUser = { name: name, password: password, email: email, role: 'member' }
+        const result = await db.insert(users).values(values).returning()
+        // userModel.createUser(user, psw, email);
+
         // console.log('intento register', result);
-        
-        res.json('si');
+
+        res.json(result);
     } catch (e) {
-        throw new Error('No se pudo registrar el user');
+        throw new HttpError(500, 'No se pudo registrar el user');
     }
 }
 
 const checkUser: RequestHandler = async (req, res) => {
-    const { user, password } = req.body;
-    try {
-        const result = await userModel.getOne(user);
-        if (result.rows[0]) {
-            const match = await bcrypt.compare(password, result.rows[0].password);
+    const user = req.body;
 
-            if (match) res.json(match);
-            else throw new HttpError(403, 'Credenciales invalidas');
-        }
+    const { success, data, error } = LoginSchema.safeParse(user)
+    if (!success) { 
+        throw new ValidationError(error) 
+    }
+    console.log('here');
+    
+    
+    const { username: name, password } = data;
+    try {
+        const [result] = await db.select().from(users).where(eq(users.name, name));
+        if (result) {
+            const match = await bcrypt.compare(password, result.password);
+            
+            if (match) res.json(match)
+            else throw new HttpError(401, 'Credenciales inválidas');
+        }else throw new HttpError(401, 'Credenciales inválidas');
     } catch (e) {
-        throw new HttpError(404, 'No se encuentra al usuario');
+        console.log('er');
+        
+        throw new HttpError(401, 'Credenciales inválidas');
     }
 }
 
-export {addUser, checkUser}
+export { addUser, checkUser }
