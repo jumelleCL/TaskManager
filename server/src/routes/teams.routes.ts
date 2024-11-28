@@ -1,18 +1,7 @@
 import express from "express";
-import pool from "../Pool";
-import HttpError from "../models/HttpError";
+import { getAll } from "../controllers/teams.controller";
 const teamsRouter = express.Router()
 
-/**
- * Te devuelve todos los equipos existentes
- */
-teamsRouter.get("/", async (req, res) => {
-    try {
-        const result = await pool.query("SELECT * FROM teams");
-        res.json(result.rows);
-    } catch (error) {
-        throw new HttpError(404, 'No se encuentran equipos')
-    }
-});
+teamsRouter.get("/", getAll);
 
 export default teamsRouter;

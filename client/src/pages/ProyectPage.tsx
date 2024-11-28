@@ -21,7 +21,7 @@ export default function ProyectTask() {
   }
   useEffect(() => {
     fetchProject()
-  });
+  }, []);
   return (
     <div className="flex flex-col my-10">
       <div className="text-black self-center font-bold text-2xl m-4">

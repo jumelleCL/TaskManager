@@ -19,7 +19,7 @@ export default function Register() {
     }
     axiosApi
       .post(`/api/users/register`, data)
-      .then((resp) => {    
+      .then((resp) => {
         if (resp.data && data.user) {
             const user: User = {
                 user: data.user,
