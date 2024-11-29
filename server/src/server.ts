@@ -6,6 +6,7 @@ import cors from 'cors';
 import HttpError from "./models/HttpError";
 import * as routes from './routes/routes'
 import ValidationError from "./models/ValidationError";
+import { checkAuth } from "./helpers/checkAuth";
 
 const app = express();
 
@@ -16,9 +17,12 @@ app.use(morgan('dev'))
 
 // Rutas
 app.use('/api/teams', routes.teamsRouter)
-app.use('/api/projects', routes.projectRouter)
-app.use('/api/tasks', routes.taskRouter)
-app.use('/api/users', routes.usersRouter)
+
+app.use('/api/projects', checkAuth, routes.projectRouter)
+
+app.use('/api/tasks', checkAuth, routes.taskRouter)
+
+app.use('/api/users', checkAuth, routes.usersRouter)
 
 
 // Middleware not Found

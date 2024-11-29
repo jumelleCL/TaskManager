@@ -8,7 +8,6 @@ import db from "../Pool";
 import { users } from "../db/schema";
 import { AddUserSchema, LoginSchema } from "../../../schemas/userSchemas";
 import ValidationError from "../models/ValidationError";
-import { checkAuth } from "../helpers/checkAuth";
 
 const addUser: RequestHandler = async (req, res, next) => {
     const user = req.body;

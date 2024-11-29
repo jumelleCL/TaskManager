@@ -5,10 +5,8 @@ import db from "../Pool";
 import { addProjectSchema } from "../../../schemas/projectSchemas";
 import { projects, tasks } from "../db/schema";
 import ValidationError from "../models/ValidationError";
-import { checkAuth } from "../helpers/checkAuth";
 
 const getAll: RequestHandler = async (req, res) => {
-    checkAuth(req)
     const search = req.query.search;
     
     try {
@@ -27,7 +25,6 @@ const getAll: RequestHandler = async (req, res) => {
 }
 
 const getOne: RequestHandler = async (req, res, next) => {
-    checkAuth(req)
     const id = req.params.id;
     
     try {
@@ -76,7 +73,6 @@ async function createProyect(team_id: number, name: string, description: string,
 }
 
 const addOne: RequestHandler = async (req, res) => {
-    checkAuth(req)
     const project = req.body;
     const { success, data, error } = addProjectSchema.safeParse(project)
     if (!success) {
