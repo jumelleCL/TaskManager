@@ -1,4 +1,12 @@
 {
+  "name": "task_manager",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "install-client": "cd client && npm i",
+    "install-server": "cd server && npm i",
+    "install": "npm run install-client && npm run install-server"
+  },
   "dependencies": {
     "zod": "^3.23.8"
   }

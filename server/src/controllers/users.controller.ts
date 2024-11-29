@@ -1,7 +1,9 @@
 import { RequestHandler } from "express";
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken';
 import { eq } from "drizzle-orm";
 import HttpError from "../models/HttpError";
+import 'dotenv/config';
 import db from "../Pool";
 import { users } from "../db/schema";
 import { AddUserSchema, LoginSchema } from "../../../schemas/userSchemas";
@@ -40,8 +42,6 @@ const checkUser: RequestHandler = async (req, res) => {
     if (!success) { 
         throw new ValidationError(error) 
     }
-    console.log('here');
-    
     
     const { username: name, password } = data;
     try {
@@ -49,11 +49,15 @@ const checkUser: RequestHandler = async (req, res) => {
         if (result) {
             const match = await bcrypt.compare(password, result.password);
             
-            if (match) res.json(match)
+            if (match) {
+                const SECRET = process.env.SECRET_KEY
+                const token = jwt.sign({username: result.name, role: result.role},SECRET! )
+                res.send({user:{username: result.name, role: result.role}, token: token})
+            }
             else throw new HttpError(401, 'Credenciales inválidas');
         }else throw new HttpError(401, 'Credenciales inválidas');
     } catch (e) {
-        console.log('er');
+        console.log('er',e);
         
         throw new HttpError(401, 'Credenciales inválidas');
     }

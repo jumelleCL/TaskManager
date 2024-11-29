@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
-import projectModel from "../models/project.model";
-import HttpError from "../models/HttpError";
-import taskModel from "../models/task.model";
-import db from "../Pool";
-import { projects, tasks } from "../db/schema";
 import { eq, like } from "drizzle-orm";
+import HttpError from "../models/HttpError";
+import db from "../Pool";
+import { addProjectSchema } from "../../../schemas/projectSchemas";
+import { projects, tasks } from "../db/schema";
+import ValidationError from "../models/ValidationError";
 
 const getAll: RequestHandler = async (req, res) => {
     const search = req.query.search;
@@ -44,7 +44,7 @@ async function createProyect(team_id: number, name: string, description: string,
         type newProject = typeof projects.$inferInsert;
         const values: newProject = {
             teamId: team_id,
-            name: name, 
+            name: name,
             description: description,
             startDate: start_date,
             endDate: end_date
@@ -67,20 +67,29 @@ async function createProyect(team_id: number, name: string, description: string,
     } catch (e) {
         // await sendQuery("ROLLBACK");
         console.log(e);
-        
+
         throw new HttpError(500, 'Error al insertar los datos')
     }
 }
 
 const addOne: RequestHandler = async (req, res) => {
-    const { team_id, name, description, start_date, end_date } = req.body;
+    const project = req.body;
+    const { success, data, error } = addProjectSchema.safeParse(project)
+    if (!success) {
+        throw new ValidationError(error)
+    }
+    const { team_id,
+        name,
+        description,
+        start_date,
+        end_date } = data
     try {
         const result = await createProyect(
             team_id,
-            name,
-            description,
-            start_date,
-            end_date
+        name,
+        description,
+        start_date,
+        end_date
         );
         res.json(result);
     } catch (e) {

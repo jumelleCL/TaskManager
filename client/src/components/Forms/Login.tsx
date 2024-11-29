@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Button from "../design/Button";
 import Input from "../design/Input";
-import { User } from "../../context/UserProvider";
 import useUserContext from "../../hooks/UseUserContext";
 import { LoginSchema } from "../../../../schemas/userSchemas";
 import axiosApi from "../../config/axiosApi";
@@ -32,13 +31,9 @@ export default function Login() {
     axiosApi
       .post("/api/users/login", data)
       .then((resp) => {
-        if (resp.data && data.username) {
-          const user: User = {
-            user: data.username,
-          };
-          userContext.logIn(user);
+        if (resp.data) {
+          userContext.logIn(resp.data?.token);
         } else return;
-        console.log('here')
       })
       .catch((err) => {
         console.error(err.response.data.message);

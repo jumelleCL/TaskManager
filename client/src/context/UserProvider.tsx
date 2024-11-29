@@ -2,28 +2,28 @@ import { createContext, ReactNode, useState } from "react"
 
 const UserContext = createContext<UserContextType|null>(null)
 type UserContextType = {
-    user: User|null,
-    logIn: (user: User) => void,
+    user: boolean,
+    logIn: (token?: string) => void,
     logOut: () => void,
-}
-export type User = {
-    user: string,
 }
 type Props = {
     children: ReactNode
 }
 export default function UserProvider ({children}: Props){
-    let getUser:User | null={ user: localStorage.getItem('user') || ''}
-    if(!getUser.user) getUser=null;
-    const [user, setUser] = useState<User|null>(getUser || null)
+    const getUser:boolean=localStorage.getItem('token') ? true : false
+    const [user, setUser] = useState<boolean>(getUser)
 
-    function logIn(user: User){
-        localStorage.setItem('user', user.user)
-        setUser(user)
+    function logIn(token?: string){
+        const hasToken = localStorage.getItem('token') ? true : false
+        if(token && !hasToken) {
+            localStorage.setItem('token', token)
+            setUser(true)
+        }
+        else setUser(hasToken)
     }
     function logOut(){
-        localStorage.removeItem('user')
-        setUser(null)
+        localStorage.removeItem('token')
+        setUser(false)
     }
 
     const userContextValues = {

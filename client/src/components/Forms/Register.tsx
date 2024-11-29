@@ -1,6 +1,5 @@
 import Button from "../design/Button";
 import Input from "../design/Input";
-import { User } from "../../context/UserProvider";
 import useUserContext from "../../hooks/UseUserContext";
 import axiosApi from "../../config/axiosApi";
 import { useForm } from "react-hook-form";
@@ -37,10 +36,7 @@ export default function Register() {
       .post(`/api/users/register`, data)
       .then((resp) => {
         if (resp.data && data.username) {
-          const user: User = {
-            user: data.username,
-          };
-          userContext.logIn(user);
+          userContext.logIn(resp.data.token);
         } else return;
       })
       .catch((err) => {
