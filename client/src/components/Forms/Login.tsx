@@ -31,8 +31,8 @@ export default function Login() {
     axiosApi
       .post("/api/users/login", data)
       .then((resp) => {
-        if (resp.data) {
-          userContext.logIn(resp.data?.token);
+        if (resp.data && resp.data.token) {
+          userContext.logIn(resp.data.token);
         } else return;
       })
       .catch((err) => {

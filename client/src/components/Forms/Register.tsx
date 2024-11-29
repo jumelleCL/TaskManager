@@ -35,7 +35,7 @@ export default function Register() {
     axiosApi
       .post(`/api/users/register`, data)
       .then((resp) => {
-        if (resp.data && data.username) {
+        if (resp.data  && resp.data.token) {
           userContext.logIn(resp.data.token);
         } else return;
       })

@@ -3,8 +3,10 @@ import HttpError from "../models/HttpError";
 import teamModel from "../models/team.model";
 import { teams } from "../db/schema";
 import db from "../Pool";
+import { checkAuth } from "../helpers/checkAuth";
 
 const getAll: RequestHandler =  async (req, res) => {
+    checkAuth(req)
     try {
         const result = await db.select().from(teams) //teamModel.getAll();
         res.json(result);

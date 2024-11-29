@@ -5,10 +5,12 @@ import db from "../Pool";
 import { addProjectSchema } from "../../../schemas/projectSchemas";
 import { projects, tasks } from "../db/schema";
 import ValidationError from "../models/ValidationError";
+import { checkAuth } from "../helpers/checkAuth";
 
 const getAll: RequestHandler = async (req, res) => {
+    checkAuth(req)
     const search = req.query.search;
-
+    
     try {
         let result;
         if (search) {
@@ -16,7 +18,7 @@ const getAll: RequestHandler = async (req, res) => {
         } else {
             result = await db.select().from(projects)
         }
-
+        
         res.json(result);
     } catch (error) {
         console.log(error)
@@ -25,8 +27,9 @@ const getAll: RequestHandler = async (req, res) => {
 }
 
 const getOne: RequestHandler = async (req, res, next) => {
+    checkAuth(req)
     const id = req.params.id;
-
+    
     try {
         const resultProject = await db.select().from(projects).where(eq(projects.id, Number(id)))
         const resultTask = await db.select().from(tasks).where(eq(tasks.projectId, Number(id)))
@@ -38,7 +41,7 @@ const getOne: RequestHandler = async (req, res, next) => {
 
 /**
  * Crea un registro en projects, necesita que le pases todos los datos
- */
+*/
 async function createProyect(team_id: number, name: string, description: string, start_date: string, end_date: string) {
     try {
         type newProject = typeof projects.$inferInsert;
@@ -58,21 +61,22 @@ async function createProyect(team_id: number, name: string, description: string,
         //     const values = [name, description, team_id, start_date, end_date];
         //     const insert = await sendQuery(query, values);
         //     await sendQuery("COMMIT");
-
+        
         //     const result = await sendQuery(
-        //         `SELECT * FROM projects WHERE id = $1`,
-        //         [insert.rows[0].id]
-        //     );
-        // return result;
-    } catch (e) {
-        // await sendQuery("ROLLBACK");
-        console.log(e);
-
-        throw new HttpError(500, 'Error al insertar los datos')
+            //         `SELECT * FROM projects WHERE id = $1`,
+            //         [insert.rows[0].id]
+            //     );
+            // return result;
+        } catch (e) {
+            // await sendQuery("ROLLBACK");
+            console.log(e);
+            
+            throw new HttpError(500, 'Error al insertar los datos')
     }
 }
 
 const addOne: RequestHandler = async (req, res) => {
+    checkAuth(req)
     const project = req.body;
     const { success, data, error } = addProjectSchema.safeParse(project)
     if (!success) {
