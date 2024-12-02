@@ -4,40 +4,29 @@ CREATE TABLE Users (
     name VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(255) CHECK (role IN ('admin', 'member')) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-DROP TABLE IF EXISTS Teams;
-CREATE TABLE Teams (
+DROP TABLE IF EXISTS Projects_Members;
+CREATE TABLE Projects_Members (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modified_at DATE NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-DROP TABLE IF EXISTS Team_Members;
-CREATE TABLE Team_Members (
-    id SERIAL PRIMARY KEY,
-    team_id INT NOT NULL,
+    role VARCHAR(255) CHECK (role IN ('admin', 'member')) NOT NULL DEFAULT('member'),
+    project_id INT NOT NULL,
     user_id INT NOT NULL,
-    FOREIGN KEY (team_id) REFERENCES Teams(id) ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES Projects(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS Projects;
 CREATE TABLE Projects (
     id SERIAL PRIMARY KEY,
-    team_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified_at DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (team_id) REFERENCES Teams(id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS Tasks;

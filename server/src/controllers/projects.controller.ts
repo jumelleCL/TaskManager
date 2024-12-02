@@ -24,12 +24,12 @@ const getAll: RequestHandler = async (req, res) => {
     }
 }
 
-const getOne: RequestHandler = async (req, res, next) => {
+const getOne: RequestHandler = async (req, res) => {
     const id = req.params.id;
-    
     try {
         const resultProject = await db.select().from(projects).where(eq(projects.id, Number(id)))
         const resultTask = await db.select().from(tasks).where(eq(tasks.projectId, Number(id)))
+        
         res.json({ project: resultProject, tasks: resultTask });
     } catch (e) {
         throw new HttpError(404, 'No se encuentra el projecto');

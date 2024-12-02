@@ -35,7 +35,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
   // * Submit // creación de un proyecto
   const teamRef = useRef<HTMLSelectElement>(null);
   function onSubmit() {
-    const team = teamRef.current?.value;
+    const team = Number(teamRef.current?.value);
     const titul = watch("titul");
     const desc = watch("descripcion");
     const start_date = "2024-11-20 18:06:59.900";

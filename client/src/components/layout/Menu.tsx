@@ -1,4 +1,4 @@
-import { FaUserCircle } from "react-icons/fa";
+// import { FaUserCircle } from "react-icons/fa";
 import AppLink from "../design/AppLink";
 import useUserContext from "../../hooks/UseUserContext";
 
@@ -32,12 +32,7 @@ export default function Menu({ vertical }: Props) {
             />
           ))
       )}
-      {user && (
-        <ul>
-          <li className="flex gap-4 items-center text-slate-300"><FaUserCircle color="white" /> {user.user}</li>
-          <li onClick={handleLogOut} className="text-slate-300">Log out</li>
-        </ul>
-      )}
+      {user && <li onClick={handleLogOut} className="text-slate-300 cursor-pointer">Log out</li>}
       {!user && (
         <>
           <AppLink name="Login" path="/login" className="text-slate-300" />

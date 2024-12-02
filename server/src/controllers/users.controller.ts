@@ -11,13 +11,12 @@ import ValidationError from "../models/ValidationError";
 
 const addUser: RequestHandler = async (req, res, next) => {
     const user = req.body;
-    console.log(user)
     const { success, data, error } = AddUserSchema.safeParse(user)
     if (!success) throw new ValidationError(error)
     const { username: name, password: psw, email } = data;
 
     const userExists = await db.select().from(users).where(eq(users.email, email))
-    if(userExists) throw new HttpError(400, 'Hay algún error en los campos')
+    if (userExists) throw new HttpError(400, 'Hay algún error en los campos')
     try {
 
         type newUser = typeof users.$inferInsert;
@@ -36,13 +35,13 @@ const addUser: RequestHandler = async (req, res, next) => {
 }
 
 const checkUser: RequestHandler = async (req, res) => {
-    const user = req.body;
+    const user = req.body;    
 
     const { success, data, error } = LoginSchema.safeParse(user)
-    if (!success) { 
-        throw new ValidationError(error) 
+    if (!success) {
+        throw new ValidationError(error)
     }
-    
+
     const { username: name, password } = data;
     try {
         const [result] = await db.select().from(users).where(eq(users.name, name));
@@ -51,14 +50,20 @@ const checkUser: RequestHandler = async (req, res) => {
             
             if (match) {
                 const SECRET = process.env.SECRET_KEY
-                const token = jwt.sign({username: result.name, role: result.role},SECRET! )
-                res.send({user:{username: result.name, role: result.role}, token: token})
+                const token = jwt.sign({ username: result.name, role: result.role }, SECRET!)
+                res.cookie('access_token', token, {
+                    httpOnly: true,
+                    expires: new Date(Date.now() + 900000),
+                    sameSite: 'none',
+                    secure: true,
+                })
+                res.send({ user: result.name })
             }
             else throw new HttpError(401, 'Credenciales inválidas');
-        }else throw new HttpError(401, 'Credenciales inválidas');
+        } else throw new HttpError(401, 'Credenciales inválidas');
     } catch (e) {
-        console.log('er',e);
-        
+        console.log('er', e);
+
         throw new HttpError(401, 'Credenciales inválidas');
     }
 }

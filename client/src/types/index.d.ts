@@ -1,17 +1,17 @@
 
 type Proyects = {
-    id?: number;
-    name?: string;
-    description?: string;
-    end_date?: Date;
-  };
-  
-  type Teams= {
-    id?: number;
-    name?: string;
-    description?: string;
-    created_at?: Date;
-  }
+  id?: number;
+  name?: string;
+  description?: string;
+  end_date?: Date;
+};
+
+type Teams = {
+  id?: number;
+  name?: string;
+  description?: string;
+  created_at?: Date;
+}
 type Tasks = {
   id?: number,
   project_id?: number,
@@ -24,4 +24,9 @@ type Tasks = {
   created_at?: Date,
   modified_at?: Date
 }
-  export {Proyects, Teams, Tasks}
+type Users = {
+  id?: number,
+  name?: string,
+  email?: string,
+}
+export { Proyects, Teams, Tasks, Users }
