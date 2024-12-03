@@ -17,8 +17,8 @@ const Input = forwardRef<HTMLInputElement, Props>(function Input(
 ) {
   const id = useId();
   return (
-    <div className={`relative ${(validate ? 'mb-5' : 'm-0')}`}>
-      <InputStyled className={`${className} rounded relative text-slate-700`}>
+    <div className={`${className} relative ${(validate ? 'mb-5' : 'm-0')}`}>
+      <InputStyled className={`rounded relative text-slate-700`}>
         <input ref={ref} id={id} type={type} required {...rest} />
         {(label || placeholder) && (
           <label htmlFor={id} className="label-name">

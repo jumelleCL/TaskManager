@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axiosApi from "../config/axiosApi";
 import { Proyects, Tasks } from "../types";
 import FormTask from "../components/Forms/FormTask";
+import TaskCard from "../components/TaskCard";
 
 export default function ProyectTask() {
   const { id } = useParams();
@@ -12,6 +13,7 @@ export default function ProyectTask() {
     axiosApi
       .get(`/api/projects/${id}`)
       .then((resp) => {
+        
         setTask(resp.data.tasks);
         setProject(resp.data.project);
       })
@@ -34,12 +36,13 @@ export default function ProyectTask() {
           {task.map(
             (t) =>
               t.status == "pending" && (
-                <div
+                <TaskCard
                   key={t.id}
-                  className="border-slate-50 bg-slate-500 border py-4 px-2 rounded"
+                  task={t}
+                  priority={t.priority || 'low'}
                 >
                   {t.title}
-                </div>
+                </TaskCard>
               )
           )}
         </div>
@@ -48,12 +51,13 @@ export default function ProyectTask() {
           {task.map(
             (t) =>
               t.status == "in_progress" && (
-                <div
+                <TaskCard
                   key={t.id}
-                  className="border-slate-50 bg-slate-500 border py-4 px-2 rounded"
+                  task={t}
+                  priority={t.priority || 'low'}
                 >
                   {t.title}
-                </div>
+                </TaskCard>
               )
           )}
         </div>
@@ -62,12 +66,13 @@ export default function ProyectTask() {
           {task.map(
             (t) =>
               t.status == "completed" && (
-                <div
+                <TaskCard
                   key={t.id}
-                  className="border-slate-50 bg-slate-500 border py-4 px-2 rounded"
+                  task={t}
+                  priority={t.priority || 'low'}
                 >
                   {t.title}
-                </div>
+                </TaskCard>
               )
           )}
         </div>

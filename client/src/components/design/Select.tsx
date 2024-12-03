@@ -1,7 +1,7 @@
-import { forwardRef } from "react";
+import { ComponentProps, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
-type SelectProps = {
+type SelectProps = ComponentProps<'select'> & {
   className?: string;
   label?: string;
   children?: React.ReactNode;
