@@ -5,6 +5,8 @@ import { Proyects, Tasks } from "../types";
 import FormTask from "../components/Forms/FormTask";
 import TaskCard from "../components/TaskCard";
 
+export type UserSimple = { userId: number; username: string };
+
 export default function ProyectTask() {
   const { id } = useParams();
   const [task, setTask] = useState<Tasks[]>([]);
@@ -13,16 +15,25 @@ export default function ProyectTask() {
     axiosApi
       .get(`/api/projects/${id}`)
       .then((resp) => {
-        
         setTask(resp.data.tasks);
         setProject(resp.data.project);
       })
       .catch(() => {
         window.location.href = "/404";
       });
-  }
+  };
+  const [members, setMembers] = useState<UserSimple[] | null>(null);
+
   useEffect(() => {
-    fetchProject()
+    fetchProject();
+    axiosApi
+      .get("api/projects/members/" + id)
+      .then((resp) => {
+        setMembers(resp.data);
+      })
+      .catch((e) => {
+        console.error(e.response.data.message);
+      });
   }, []);
   return (
     <div className="flex flex-col my-10">
@@ -37,10 +48,11 @@ export default function ProyectTask() {
             (t) =>
               t.status == "pending" && (
                 <TaskCard
+                  member={members}
                   onTaskCreated={fetchProject}
                   key={t.id}
                   task={t}
-                  priority={t.priority || 'low'}
+                  priority={t.priority || "low"}
                 >
                   {t.title}
                 </TaskCard>
@@ -53,10 +65,11 @@ export default function ProyectTask() {
             (t) =>
               t.status == "in_progress" && (
                 <TaskCard
+                  member={members}
                   onTaskCreated={fetchProject}
                   key={t.id}
                   task={t}
-                  priority={t.priority || 'low'}
+                  priority={t.priority || "low"}
                 >
                   {t.title}
                 </TaskCard>
@@ -69,10 +82,11 @@ export default function ProyectTask() {
             (t) =>
               t.status == "completed" && (
                 <TaskCard
-                onTaskCreated={fetchProject}
+                  member={members}
+                  onTaskCreated={fetchProject}
                   key={t.id}
                   task={t}
-                  priority={t.priority || 'low'}
+                  priority={t.priority || "low"}
                 >
                   {t.title}
                 </TaskCard>

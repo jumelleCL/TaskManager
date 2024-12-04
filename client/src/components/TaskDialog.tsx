@@ -9,6 +9,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axiosApi from "../config/axiosApi";
 import { useParams } from "react-router-dom";
+import { UserSimple } from "../pages/ProyectPage";
+
 
 type Props = {
   id?: number;
@@ -18,6 +20,7 @@ type Props = {
   priority?: string;
   status?: string;
   onTaskCreated?: () => void;
+  member: UserSimple[]
 };
 const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
   props: Props,
@@ -70,6 +73,8 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
         console.error(e.response.data.message);
       });
   }
+
+
   return (
     <dialog
       ref={refToUse}
@@ -122,7 +127,9 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
           <div className="flex items-center my-4">
             <p className="mr-4">Asignar</p>
             <Select>
-              <option value="miembro">Miembro</option>
+              {props.member?.map((m) =>(
+                <option key={m.userId} value={m.userId}>{m.username}</option>
+              ))}
             </Select>
           </div>
 

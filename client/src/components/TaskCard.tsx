@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import TaskDialog from "./TaskDialog";
+import { UserSimple } from "../pages/ProyectPage";
 
 type Props = {
   task: {
@@ -10,11 +11,12 @@ type Props = {
     status?: string;
     assigned_to?: number;
   };
+  member: UserSimple[];
   onTaskCreated: () => void;
   priority: string;
   children: React.ReactNode;
 };
-export default function TaskCard({ children, priority, task, onTaskCreated }: Props) {
+export default function TaskCard({ children, priority, task, member, onTaskCreated }: Props) {
   const colorClasses = {
     low: "border-green-300",
     medium: "border-yellow-300",
@@ -29,6 +31,7 @@ export default function TaskCard({ children, priority, task, onTaskCreated }: Pr
   return (
     <>
       {task && <TaskDialog
+      member ={member}
       onTaskCreated={onTaskCreated}
       ref={dialogRef}
         id={task.id}
