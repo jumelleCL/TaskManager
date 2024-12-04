@@ -26,7 +26,6 @@ export default function Login() {
       username: watch("username"),
       password: watch("password"),
     };
-    console.log(data);
     
     axiosApi
       .post("/api/users/login", data)

@@ -10,10 +10,11 @@ type Props = {
     status?: string;
     assigned_to?: number;
   };
+  onTaskCreated: () => void;
   priority: string;
   children: React.ReactNode;
 };
-export default function TaskCard({ children, priority, task }: Props) {
+export default function TaskCard({ children, priority, task, onTaskCreated }: Props) {
   const colorClasses = {
     low: "border-green-300",
     medium: "border-yellow-300",
@@ -28,6 +29,7 @@ export default function TaskCard({ children, priority, task }: Props) {
   return (
     <>
       {task && <TaskDialog
+      onTaskCreated={onTaskCreated}
       ref={dialogRef}
         id={task.id}
         title={task.title}

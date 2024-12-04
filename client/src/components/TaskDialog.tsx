@@ -7,6 +7,8 @@ import Button from "./design/Button";
 import { AddTaskSchema } from "../../../schemas/taskSchemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axiosApi from "../config/axiosApi";
+import { useParams } from "react-router-dom";
 
 type Props = {
   id?: number;
@@ -15,23 +17,26 @@ type Props = {
   assigned_to?: number;
   priority?: string;
   status?: string;
+  onTaskCreated?: () => void;
 };
 const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
   props: Props,
   externalRef
 ) {
-  const { register, handleSubmit, formState, watch } = useForm<Props>({
+  const proyect = Number(useParams().id)
+  
+  const { register, formState, watch } = useForm<Props>({
     mode: "onChange",
     resolver: zodResolver(AddTaskSchema),
     defaultValues: {
       title: props.title,
       description: props.description,
       priority: props.priority,
-      status: props.status
-    }
+      status: props.status,
+    },
   });
 
-  const { errors, isValid } = formState;
+  const { errors } = formState;
 
   const internalRef = useRef<HTMLDialogElement>(null);
   const refToUse =
@@ -39,23 +44,38 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
       ? internalRef
       : externalRef;
 
-  function handleChange() {    
+  function handleChange(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    console.log("submit");
+
     const data = {
+      projectId: proyect,
+      id: props.id,
       title: watch("title"),
-      description: watch("description"),
-      assigned_to: watch("assigned_to"),
+      description: watch("description") || '',
+      assigned_to: props.assigned_to,
       priority: watch("priority"),
       status: watch("status"),
     };
-    console.log(data);
-    console.log(isValid);
+
+    axiosApi
+      .put("/api/tasks", data)
+      .then((resp) => {
+        if (resp.data) {
+          if (props.onTaskCreated) props.onTaskCreated();
+          refToUse.current?.close();
+        } else return;
+      })
+      .catch((e) => {
+        console.error(e.response.data.message);
+      });
   }
   return (
     <dialog
       ref={refToUse}
       className="p-4 rounded-xl min-w-[70%] py-10 bg-slate-200"
     >
-      <form onSubmit={handleSubmit(handleChange)}>
+      <form onSubmit={handleChange}>
         <div className="grid min-w-full grid-cols-6">
           <Input
             validate
@@ -65,14 +85,18 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
             {...register("title")}
           />
           <Button
+            type="button"
             className="flex justify-center items-center rounded-3xl p-0 py-1"
-            onClick={() => refToUse.current?.close()}
+            onClick={() => {
+              refToUse.current?.close();
+            }}
           >
             <IoIosClose size={30} color="white" />
           </Button>
         </div>
         <Input
           label="description"
+          required={false}
           className="mt-4"
           validate
           error={errors.description}
@@ -81,7 +105,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
         <div>
           <div className="flex items-center my-4">
             <p className="mr-4">Prioridad</p>
-            <Select {...register('priority')}>
+            <Select {...register("priority")}>
               <option value="low">Low</option>
               <option value="high">High</option>
               <option value="medium">Medium</option>
@@ -89,7 +113,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
           </div>
           <div className="flex items-center my-4">
             <p className="mr-4">Estado</p>
-            <Select {...register('status')}>
+            <Select {...register("status")}>
               <option value="pending">Pending</option>
               <option value="in_progress">In progress</option>
               <option value="completed">Completed</option>
@@ -101,6 +125,13 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
               <option value="miembro">Miembro</option>
             </Select>
           </div>
+
+          <Button
+          validate
+          type="submit"
+          className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200 active:bg-slate-500"
+          text="Submit"
+        />
         </div>
       </form>
     </dialog>

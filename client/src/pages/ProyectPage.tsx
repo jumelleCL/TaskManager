@@ -37,6 +37,7 @@ export default function ProyectTask() {
             (t) =>
               t.status == "pending" && (
                 <TaskCard
+                  onTaskCreated={fetchProject}
                   key={t.id}
                   task={t}
                   priority={t.priority || 'low'}
@@ -52,6 +53,7 @@ export default function ProyectTask() {
             (t) =>
               t.status == "in_progress" && (
                 <TaskCard
+                  onTaskCreated={fetchProject}
                   key={t.id}
                   task={t}
                   priority={t.priority || 'low'}
@@ -67,6 +69,7 @@ export default function ProyectTask() {
             (t) =>
               t.status == "completed" && (
                 <TaskCard
+                onTaskCreated={fetchProject}
                   key={t.id}
                   task={t}
                   priority={t.priority || 'low'}

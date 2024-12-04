@@ -6,16 +6,17 @@ const AddTaskSchema = z.object({
     description: z.string().optional(),
     projectId: z.number().min(1, 'Projecto requerido'),
     priority: z.enum(['high', 'medium', 'low']).optional(),
-    status: z.enum(['pending', 'in_progress','completed']).optional()
+    status: z.enum(['pending', 'in_progress', 'completed']).optional()
 })
 
 const UpdateTaskSchema = z.object({
     id: z.number(),
-    title: z.string().optional(),
-    description: z.string().optional(),
+    title: z.string(),
+    description: z.string(),
     projectId: z.number().min(1, 'Projecto requerido'),
-    priority: z.enum(['high', 'medium', 'low']).optional(),
-    status: z.enum(['pending', 'in_progress','completed']).optional()
+    priority: z.enum(['high', 'medium', 'low']),
+    status: z.enum(['pending', 'in_progress', 'completed']),
+    assigned_to: z.number().optional(),
 })
 
-export {AddTaskSchema, UpdateTaskSchema}
+export { AddTaskSchema, UpdateTaskSchema }
