@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import Menu from "./Menu";
 import { NavLink } from "react-router-dom";
+import useUserContext from "../../hooks/UseUserContext";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,10 +12,12 @@ function Header() {
   function toggle() {
     setIsMenuOpen(!isMenuOpen);
   }
+  
+  const {user} = useUserContext()
 
   return (
     <header className="flex justify-evenly w-full bg-gray-800 items-center p-3">
-      <NavLink to="/">
+      <NavLink to={user ? '/proyects' : '/'}>
         <Logo />
       </NavLink>
       <div className="hidden sm:block">

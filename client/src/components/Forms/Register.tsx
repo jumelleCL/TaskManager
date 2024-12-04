@@ -35,11 +35,14 @@ export default function Register() {
     axiosApi
       .post(`/api/users/register`, data)
       .then((resp) => {
-        if (resp.data  && resp.data.token) {
-          userContext.logIn(resp.data.token);
+        console.log(resp)
+        if (resp.data  && resp.data.name) {
+          console.log(resp.data)
+          userContext.logIn(resp.data.name);
         } else return;
       })
       .catch((err) => {
+        console.error(err.response.data.message)
         setFetchError(err.response.data.message)
       });
   }

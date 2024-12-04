@@ -15,21 +15,24 @@ const addUser: RequestHandler = async (req, res, next) => {
     if (!success) throw new ValidationError(error)
     const { username: name, password: psw, email } = data;
 
-    const userExists = await db.select().from(users).where(eq(users.email, email))
+    const [userExists] = await db.select().from(users).where(eq(users.email, email)) 
+    
     if (userExists) throw new HttpError(400, 'Hay algún error en los campos')
     try {
 
         type newUser = typeof users.$inferInsert;
 
         const password = await bcrypt.hash(psw, 10)
-        const values: newUser = { name: name, password: password, email: email, role: 'member' }
-        const result = await db.insert(users).values(values).returning()
+        const values: newUser = { name: name, password: password, email: email }
+        const [result] = await db.insert(users).values(values).returning()
         // userModel.createUser(user, psw, email);
 
         // console.log('intento register', result);
 
         res.json(result);
     } catch (e) {
+        console.log(e);
+        
         throw new HttpError(500, 'No se pudo registrar el user');
     }
 }
@@ -50,7 +53,7 @@ const checkUser: RequestHandler = async (req, res) => {
             
             if (match) {
                 const SECRET = process.env.SECRET_KEY
-                const token = jwt.sign({ username: result.name, role: result.role }, SECRET!)
+                const token = jwt.sign({id: result.id, username: result.name }, SECRET!)
                 res.cookie('access_token', token, {
                     httpOnly: true,
                     expires: new Date(Date.now() + 900000),
@@ -61,8 +64,8 @@ const checkUser: RequestHandler = async (req, res) => {
             }
             else throw new HttpError(401, 'Credenciales inválidas');
         } else throw new HttpError(401, 'Credenciales inválidas');
-    } catch (e) {
-        console.log('er', e);
+    } catch (e: any) {
+        console.log('er', e.message);
 
         throw new HttpError(401, 'Credenciales inválidas');
     }

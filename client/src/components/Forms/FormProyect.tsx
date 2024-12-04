@@ -3,12 +3,9 @@ import Input from "../design/Input";
 import Button from "../design/Button";
 import { useForm } from "react-hook-form";
 import { forwardRef, useRef } from "react";
-import Select from "../design/Select";
-import { Teams } from "../../types";
 import axiosApi from "../../config/axiosApi";
 
 type Props = {
-  teams: Teams[];
   className?: string;
   onProyectCreated?: () => void;
 };
@@ -18,7 +15,7 @@ type FormValues = {
 };
 
 const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
-  { teams, className, onProyectCreated}: Props,
+  { className, onProyectCreated}: Props,
   externalRef
 ) {
   const { register, handleSubmit, formState, watch } = useForm<FormValues>({
@@ -33,16 +30,13 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
       : externalRef;
 
   // * Submit // creación de un proyecto
-  const teamRef = useRef<HTMLSelectElement>(null);
   function onSubmit() {
-    const team = Number(teamRef.current?.value);
     const titul = watch("titul");
     const desc = watch("descripcion");
     const start_date = "2024-11-20 18:06:59.900";
     const end_date = "2024-11-30 18:06:59.900";
 
     const data = {
-      team_id: team,
       name: titul,
       description: desc,
       start_date: start_date,
@@ -116,13 +110,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
             },
           })}
         />
-        <Select label="Equipo" ref={teamRef}>
-          {teams.map((team) => (
-            <option key={team.id} value={team.id}>
-              {team.name}
-            </option>
-          ))}
-        </Select>
+        
         <Button
           disabled={!isValid}
           type="submit"

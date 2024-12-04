@@ -1,16 +1,18 @@
 import { RequestHandler } from "express";
 import HttpError from "../models/HttpError";
-import taskModel from "../models/task.model";
+import ValidationError from "../models/ValidationError";
 import { tasks } from "../db/schema";
 import db from "../Pool";
+import { AddTaskSchema, UpdateTaskSchema } from "../../../schemas/taskSchemas";
+import { eq } from "drizzle-orm";
 
 const addTask: RequestHandler = async (req, res) => {
-    const { id, title } = req.body;
+    const {success, data, error} = AddTaskSchema.safeParse(req.body);
+    if(!success) throw new ValidationError(error)
     try {
-        
         type newTask = typeof tasks.$inferInsert;
 
-        const values: newTask = { projectId: id, title: title , priority: 'low', status: 'pending' }
+        const values: newTask = { projectId: data.projectId, title: data.title, description: data.description || '', priority: 'low', status: 'pending' }
         const result = await db.insert(tasks).values(values).returning()
 
         res.json(result)
@@ -20,4 +22,16 @@ const addTask: RequestHandler = async (req, res) => {
     }
 }
 
-export {addTask}
+const updateTask: RequestHandler = async (req, res) => {
+    const {success, data, error} = UpdateTaskSchema.safeParse(req.body);
+    if(!success) throw new ValidationError(error)
+        type newTask = typeof tasks.$inferInsert;
+
+    const values: newTask = {id: data.id, title: data.title, description: data.description}
+    const result = await db.update(tasks).set({ 
+        title: data.title,
+        description: data.description
+    }).where(eq(tasks.id, values.id ))
+}
+
+export {addTask, updateTask}

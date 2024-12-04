@@ -1,4 +1,4 @@
-import Footer from "./components/layout/Footer";
+// import Footer from "./components/layout/Footer";
 import Header from "./components/layout/Header";
 import UserProvider from "./context/UserProvider";
 import AppRoutes from "./routes/AppRoutes";
@@ -12,7 +12,7 @@ function App() {
           <AppRoutes />
         </main>
       </UserProvider>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

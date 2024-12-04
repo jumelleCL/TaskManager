@@ -12,17 +12,19 @@ const FormTask = forwardRef<HTMLFormElement, Props>(function FormTask({onTaskCre
   const taskRef = useRef<HTMLInputElement>(null);
   function addTask(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = {id: idProject, title: taskRef.current?.value}
+    const data = {projectId: idProject, title: taskRef.current?.value}
     axiosApi
       .post("/api/tasks", data)
       .then((resp) => {
+        console.log(resp);
+        
         if (resp.data) {
           if(onTaskCreated) onTaskCreated()
             if(taskRef.current)taskRef.current.value = '';
         } else return;
       })
       .catch((e) => {
-        console.error(e);
+        console.error(e.response.data.message);
       });
     
   }

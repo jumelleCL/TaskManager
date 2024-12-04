@@ -7,7 +7,7 @@ type Props = {
 };
 
 export default function Menu({ vertical }: Props) {
-  const navItems = [{ name: "Proyects", path: "/proyects", public: false }];
+  // const navItems = [{ name: "Proyects", path: "/proyects", public: false }];
 
   const { user, logOut } = useUserContext();
   function handleLogOut() {
@@ -20,7 +20,7 @@ export default function Menu({ vertical }: Props) {
         vertical && "flex-col"
       }`}
     >
-      {navItems.map(
+      {/* {navItems.map(
         (item) =>
           (item.public && !user) ||
           (!item.public && user && (
@@ -31,7 +31,7 @@ export default function Menu({ vertical }: Props) {
               className="text-slate-300"
             />
           ))
-      )}
+      )} */}
       {user && <li onClick={handleLogOut} className="text-slate-300 cursor-pointer">Log out</li>}
       {!user && (
         <>

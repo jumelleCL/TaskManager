@@ -6,7 +6,7 @@ function PublicRoute() {
     const {user} = useUserContext()
   if (!user) return <Outlet /> 
 
-  return <Navigate to="/"/>
+  return <Navigate to="/proyects"/>
 
 }
 

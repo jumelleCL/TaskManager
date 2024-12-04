@@ -7,7 +7,7 @@ import cors from 'cors';
 import HttpError from "./models/HttpError";
 import * as routes from './routes/routes'
 import ValidationError from "./models/ValidationError";
-import { checkAuth } from "./helpers/checkAuth";
+import { checkAuth } from "./middleware/checkAuth";
 
 const app = express();
 
@@ -22,19 +22,12 @@ app.use(cors({
 
 
 // Rutas
-app.use('/api/teams', routes.teamsRouter)
-
 app.use('/api/projects', checkAuth, routes.projectRouter)
 
 app.use('/api/tasks', checkAuth, routes.taskRouter)
 
 app.use('/api/users', routes.usersRouter)
 
-
-// Middleware not Found
-app.use((req, res) => {
-  throw new HttpError(404, 'Ruta no encontrada')
-})
 
 // Middleware Errores
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
@@ -45,4 +38,11 @@ app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
     res.status(400).send({message: error.errors})
   }
 })
+
+
+// Middleware not Found
+app.use((req, res) => {
+  throw new HttpError(404, 'Ruta no encontrada')
+})
+
 app.listen(5000, () => console.log("Server running on port 5000"));

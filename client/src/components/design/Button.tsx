@@ -15,7 +15,7 @@ export default function Button({ text, children, className, validate, error, ...
   );
 
   return (
-    <div className={`${(validate && 'relative')} flex flex-col justify-center`}>
+    <div className={`${(validate && 'relative pt-7')} flex flex-col justify-center`}>
       {validate &&  (<span className="absolute text-red-700 text-sm top-0 left-0 w-full">{error}</span>)}
       <button {...rest} className={`${classes} ${(validate ? 'mt-10': 'mt-0')}`}>
         {text || children || "Click"}

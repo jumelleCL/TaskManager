@@ -4,7 +4,7 @@ import { IoIosClose } from "react-icons/io";
 import Input from "./design/Input";
 import Select from "./design/Select";
 import Button from "./design/Button";
-import { addTaskSchema } from "../../../schemas/taskSchemas";
+import { AddTaskSchema } from "../../../schemas/taskSchemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -22,7 +22,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
 ) {
   const { register, handleSubmit, formState, watch } = useForm<Props>({
     mode: "onChange",
-    resolver: zodResolver(addTaskSchema),
+    resolver: zodResolver(AddTaskSchema),
     defaultValues: {
       title: props.title,
       description: props.description,
