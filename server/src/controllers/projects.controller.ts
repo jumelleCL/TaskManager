@@ -77,7 +77,7 @@ const getOne: RequestHandler = async (req, res) => {
 
         const resultTask = await db.select().from(tasks).where(eq(tasks.projectId, Number(id)))
 
-        res.json({ project: resultProject, tasks: resultTask });
+        res.json({ project: resultProject[0], tasks: resultTask });
     } catch (e) {
         throw new HttpError(404, 'No se encuentra el projecto');
     }

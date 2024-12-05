@@ -7,16 +7,16 @@ INSERT INTO Projects(name, description) VALUES ('proyect 1', 'Lorem ipsum dolor 
 INSERT INTO Projects(name, description) VALUES ('proyect 2', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam');
 INSERT INTO Projects(name, description) VALUES ('proyect 3', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam');
 
-INSERT INTO Projects_Members(role, project_id, user_id) VALUES ('admin', 1, 1);
-INSERT INTO Projects_Members(role, project_id, user_id) VALUES ('member', 1, 3);
-INSERT INTO Projects_Members(role, project_id, user_id) VALUES ('member', 1, 4);
+INSERT INTO UsersJoinProjects(role, project_id, user_id) VALUES ('admin', 1, 1);
+INSERT INTO UsersJoinProjects(role, project_id, user_id) VALUES ('member', 1, 3);
+INSERT INTO UsersJoinProjects(role, project_id, user_id) VALUES ('member', 1, 4);
 
 
-INSERT INTO Projects_Members(role, project_id, user_id) VALUES ('admin', 2, 2);
-INSERT INTO Projects_Members(role, project_id, user_id) VALUES ('member', 2, 3);
-INSERT INTO Projects_Members(role, project_id, user_id) VALUES ('member', 2, 4);
+INSERT INTO UsersJoinProjects(role, project_id, user_id) VALUES ('admin', 2, 2);
+INSERT INTO UsersJoinProjects(role, project_id, user_id) VALUES ('member', 2, 3);
+INSERT INTO UsersJoinProjects(role, project_id, user_id) VALUES ('member', 2, 4);
 
 
-INSERT INTO Projects_Members(role, project_id, user_id) VALUES ('admin', 3, 1);
-INSERT INTO Projects_Members(role, project_id, user_id) VALUES ('member', 3, 3);
-INSERT INTO Projects_Members(role, project_id, user_id) VALUES ('member', 3, 4);
+INSERT INTO UsersJoinProjects(role, project_id, user_id) VALUES ('admin', 3, 1);
+INSERT INTO UsersJoinProjects(role, project_id, user_id) VALUES ('member', 3, 3);
+INSERT INTO UsersJoinProjects(role, project_id, user_id) VALUES ('member', 3, 4);

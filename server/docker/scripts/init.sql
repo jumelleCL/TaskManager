@@ -13,18 +13,17 @@ CREATE TABLE Projects (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    start_date DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    end_date DATE NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL '15' day),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    start_and_created_at DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    end_at DATE NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL '15' day),
     modified_at DATE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-DROP TABLE IF EXISTS Projects_Members;
-CREATE TABLE Projects_Members (
-    id SERIAL PRIMARY KEY,
-    role VARCHAR(255) CHECK (role IN ('admin', 'member')) NOT NULL DEFAULT('member'),
+DROP TABLE IF EXISTS UsersJoinProjects;
+CREATE TABLE UsersJoinProjects (
     project_id INT NOT NULL,
     user_id INT NOT NULL,
+    role VARCHAR(255) CHECK (role IN ('admin', 'member')) NOT NULL DEFAULT('member'),
+    PRIMARY KEY (user_id, project_id),
     FOREIGN KEY (project_id) REFERENCES Projects(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
 );
@@ -47,11 +46,11 @@ CREATE TABLE Tasks (
 
 DROP TABLE IF EXISTS Activity_log;
 CREATE TABLE Activity_log(
-    id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     task_id INT NOT NULL,
     activity_type VARCHAR(255) CHECK(activity_type IN('created', 'updated_status', 'comented','added_attachment')),
     timestamp DATE NOT NULL,
+    PRIMARY KEY (user_id, task_id),
     FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
     FOREIGN KEY (task_id) REFERENCES Tasks(id) ON DELETE CASCADE
 );

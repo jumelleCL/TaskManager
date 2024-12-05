@@ -1,4 +1,4 @@
-import { pgTable, serial, varchar, text, date, timestamp, foreignKey, check, integer, unique } from "drizzle-orm/pg-core"
+import { pgTable, serial, varchar, text, date, unique, timestamp, foreignKey, check, integer, primaryKey } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -7,31 +7,9 @@ export const projects = pgTable("projects", {
 	id: serial().primaryKey().notNull(),
 	name: varchar({ length: 255 }).notNull(),
 	description: text(),
-	startDate: date("start_date").default(sql`CURRENT_TIMESTAMP`).notNull(),
-	endDate: date("end_date").default(sql`(CURRENT_TIMESTAMP + '15 days'::interval day)`).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
+	startAndCreatedAt: date("start_and_created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
+	endAt: date("end_at").default(sql`(CURRENT_TIMESTAMP + '15 days'::interval day)`).notNull(),
 	modifiedAt: date("modified_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
-});
-
-export const projectsMembers = pgTable("projects_members", {
-	id: serial().primaryKey().notNull(),
-	role: varchar({ length: 255 }).default('member').notNull(),
-	projectId: integer("project_id").notNull(),
-	userId: integer("user_id").notNull(),
-}, (table) => {
-	return {
-		projectsMembersProjectIdFkey: foreignKey({
-			columns: [table.projectId],
-			foreignColumns: [projects.id],
-			name: "projects_members_project_id_fkey"
-		}).onDelete("cascade"),
-		projectsMembersUserIdFkey: foreignKey({
-			columns: [table.userId],
-			foreignColumns: [users.id],
-			name: "projects_members_user_id_fkey"
-		}).onDelete("cascade"),
-		projectsMembersRoleCheck: check("projects_members_role_check", sql`(role)::text = ANY ((ARRAY['admin'::character varying, 'member'::character varying])::text[])`),
-	}
 });
 
 export const users = pgTable("users", {
@@ -76,8 +54,28 @@ export const tasks = pgTable("tasks", {
 	}
 });
 
+export const usersjoinprojects = pgTable("usersjoinprojects", {
+	projectId: integer("project_id").notNull(),
+	userId: integer("user_id").notNull(),
+	role: varchar({ length: 255 }).default('member').notNull(),
+}, (table) => {
+	return {
+		usersjoinprojectsProjectIdFkey: foreignKey({
+			columns: [table.projectId],
+			foreignColumns: [projects.id],
+			name: "usersjoinprojects_project_id_fkey"
+		}).onDelete("cascade"),
+		usersjoinprojectsUserIdFkey: foreignKey({
+			columns: [table.userId],
+			foreignColumns: [users.id],
+			name: "usersjoinprojects_user_id_fkey"
+		}).onDelete("cascade"),
+		usersjoinprojectsPkey: primaryKey({ columns: [table.projectId, table.userId], name: "usersjoinprojects_pkey"}),
+		usersjoinprojectsRoleCheck: check("usersjoinprojects_role_check", sql`(role)::text = ANY ((ARRAY['admin'::character varying, 'member'::character varying])::text[])`),
+	}
+});
+
 export const activityLog = pgTable("activity_log", {
-	id: serial().primaryKey().notNull(),
 	userId: integer("user_id").notNull(),
 	taskId: integer("task_id").notNull(),
 	activityType: varchar("activity_type", { length: 255 }),
@@ -94,6 +92,7 @@ export const activityLog = pgTable("activity_log", {
 			foreignColumns: [tasks.id],
 			name: "activity_log_task_id_fkey"
 		}).onDelete("cascade"),
+		activityLogPkey: primaryKey({ columns: [table.userId, table.taskId], name: "activity_log_pkey"}),
 		activityLogActivityTypeCheck: check("activity_log_activity_type_check", sql`(activity_type)::text = ANY ((ARRAY['created'::character varying, 'updated_status'::character varying, 'comented'::character varying, 'added_attachment'::character varying])::text[])`),
 	}
 });
