@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .btn-primary {
+        @apply bg-primary hover:bg-primary-hover active:bg-primary text-white
+    }
+    .btn-danger{
+        @apply bg-red-danger hover:bg-red-danger-hover active:bg-red-danger text-white
+    }
+
+    .btn-green{
+        @apply bg-green-primary hover:bg-green-disable active:bg-green-primary text-secondary
+    }
+    .btn-green-disable{
+        @apply bg-green-disable hover:bg-green-primary active:bg-green-disable text-secondary
+    }
+
+    .btn-yellow {
+        @apply bg-yellow-primary hover:bg-yellow-disable active:bg-yellow-primary text-secondary
+    }
+    .btn-yellow-disable {
+        @apply bg-yellow-disable hover:bg-yellow-primary active:bg-yellow-disable text-secondary
+    }
+    .btn-red{
+        @apply bg-red-primary hover:bg-red-disable active:bg-red-primary text-secondary
+    }
+    .btn-red-disable{
+        @apply bg-red-disable hover:bg-red-primary active:bg-red-disable text-secondary
+    }
+
+    .btn-icon{
+        @apply bg-transparent text-secondary hover:scale-110 active:scale-0 border-none 
+    }
+
+}

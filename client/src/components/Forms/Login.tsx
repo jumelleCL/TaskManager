@@ -26,7 +26,7 @@ export default function Login() {
       username: watch("username"),
       password: watch("password"),
     };
-    
+
     axiosApi
       .post("/api/users/login", data)
       .then((resp) => {
@@ -63,6 +63,7 @@ export default function Login() {
           {...register("password")}
         />
         <Button
+          version="btn-primary"
           validate
           error={fetchError}
           disabled={!isValid}

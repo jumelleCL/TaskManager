@@ -4,6 +4,7 @@ import Button from "../design/Button";
 import { useForm } from "react-hook-form";
 import { forwardRef, useRef } from "react";
 import axiosApi from "../../config/axiosApi";
+import useUserContext from "../../hooks/UseUserContext";
 
 type Props = {
   className?: string;
@@ -15,9 +16,10 @@ type FormValues = {
 };
 
 const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
-  { className, onProyectCreated}: Props,
+  { className, onProyectCreated }: Props,
   externalRef
 ) {
+  const userContext = useUserContext()
   const { register, handleSubmit, formState, watch } = useForm<FormValues>({
     mode: "onChange",
   });
@@ -47,11 +49,13 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
       .then((resp) => {
         if (resp.data) {
           refToUse.current?.close();
-          if(onProyectCreated) onProyectCreated()
+          if (onProyectCreated) onProyectCreated();
         } else return;
       })
       .catch((e) => {
+        if(e.response.data.status === 401) userContext.logOut()
         console.error(e);
+        
       });
   }
   return (
@@ -62,6 +66,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
       <div className="flex justify-between items-center">
         <h3 className="font-bold">Crear Proyecto</h3>
         <Button
+          version="btn-primary"
           onClick={() => refToUse.current?.close()}
           className="bg-transparent border-none p-0 m-0 flex items-center hover:bg-inherit hover:text-slate-950"
         >
@@ -110,8 +115,9 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
             },
           })}
         />
-        
+
         <Button
+          version="btn-primary"
           disabled={!isValid}
           type="submit"
           className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200"

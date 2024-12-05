@@ -2,14 +2,18 @@ import { forwardRef, useRef } from "react";
 import Input from "../design/Input";
 import Button from "../design/Button";
 import axiosApi from "../../config/axiosApi";
+import useUserContext from "../../hooks/UseUserContext";
+import { useParams } from "react-router-dom";
 
 type Props = {
     onTaskCreated?: ()=> void;
-    idProject: number;
 }
 
-const FormTask = forwardRef<HTMLFormElement, Props>(function FormTask({onTaskCreated, idProject}: Props, ref) {
+const FormTask = forwardRef<HTMLFormElement, Props>(function FormTask({onTaskCreated}: Props, ref) {
   const taskRef = useRef<HTMLInputElement>(null);
+  const userContext = useUserContext()
+  const idProject = Number(useParams().id)
+  
   function addTask(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = {projectId: idProject, title: taskRef.current?.value}
@@ -24,6 +28,7 @@ const FormTask = forwardRef<HTMLFormElement, Props>(function FormTask({onTaskCre
         } else return;
       })
       .catch((e) => {
+        if(e.response.data.status === 401) userContext.logOut()
         console.error(e.response.data.message);
       });
     
@@ -37,7 +42,7 @@ const FormTask = forwardRef<HTMLFormElement, Props>(function FormTask({onTaskCre
       <div className="col-start-1 col-end-3">
         <Input type="text" label="Nueva tarea"  className="rounded-r-none" ref={taskRef}/>
       </div>{" "}
-      <Button type="submit" text="Añadir" className="rounded-l-none" />
+      <Button version="btn-primary" type="submit" text="Añadir" className="rounded-l-none" />
     </form>
   );
 });

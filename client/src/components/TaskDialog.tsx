@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axiosApi from "../config/axiosApi";
 import { useParams } from "react-router-dom";
 import { UserSimple } from "../pages/ProyectPage";
-
+import useUserContext from "../hooks/UseUserContext";
 
 type Props = {
   id?: number;
@@ -20,14 +20,15 @@ type Props = {
   priority?: string;
   status?: string;
   onTaskCreated?: () => void;
-  member: UserSimple[] | null
+  member: UserSimple[] | null;
 };
 const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
   props: Props,
   externalRef
 ) {
-  const proyect = Number(useParams().id)
-  
+  const proyect = Number(useParams().id);
+  const userContext = useUserContext()
+
   const { register, formState, watch } = useForm<Props>({
     mode: "onChange",
     resolver: zodResolver(AddTaskSchema),
@@ -48,14 +49,14 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
       : externalRef;
 
   function handleChange(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+    e.preventDefault();
     console.log("submit");
 
     const data = {
       projectId: proyect,
       id: props.id,
       title: watch("title"),
-      description: watch("description") || '',
+      description: watch("description") || "",
       assigned_to: props.assigned_to,
       priority: watch("priority"),
       status: watch("status"),
@@ -70,34 +71,38 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
         } else return;
       })
       .catch((e) => {
+        if(e.response.data.status === 401) userContext.logOut()
         console.error(e.response.data.message);
       });
   }
 
-
   return (
     <dialog
       ref={refToUse}
-      className="p-4 rounded-xl min-w-[70%] py-10 bg-slate-200"
+      className="p-4 rounded-xl min-w-[70%] py-5 bg-white border-t-[5vh] border-t-primary"
     >
       <form onSubmit={handleChange}>
-        <div className="grid min-w-full grid-cols-6">
-          <Input
-            validate
-            error={errors.title}
-            className="col-start-1 col-end-6"
-            label="title"
-            {...register("title")}
-          />
+        <div className="flex justify-between items-center mb-5 p-4">
+          <h2 className="text-4xl font-bold">Edit task</h2>
           <Button
+            version="btn-icon"
             type="button"
-            className="flex justify-center items-center rounded-3xl p-0 py-1"
+            className="flex justify-center text-black items-center rounded-3xl p-0 py-1"
             onClick={() => {
               refToUse.current?.close();
             }}
           >
-            <IoIosClose size={30} color="white" />
+            <IoIosClose size={50} color="black" />
           </Button>
+        </div>
+        <div className="grid min-w-full">
+          <Input
+          className="rounded-4xl"
+            validate
+            error={errors.title}
+            label="title"
+            {...register("title")}
+          />
         </div>
         <Input
           label="description"
@@ -126,18 +131,31 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
           <div className="flex items-center my-4">
             <p className="mr-4">Asignar</p>
             <Select>
-              {props.member?.map((m) =>(
-                <option key={m.userId} value={m.userId}>{m.username}</option>
+              {props.member?.map((m) => (
+                <option key={m.userId} value={m.userId}>
+                  {m.username}
+                </option>
               ))}
             </Select>
           </div>
 
-          <Button
-          validate
-          type="submit"
-          className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200 active:bg-slate-500"
-          text="Cambiar"
-        />
+          <div className="flex items-center justify-evenly">
+            <Button
+              version="btn-primary"
+              validate
+              type="submit"
+              className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200 active:bg-slate-500"
+              text="Cambiar"
+            />
+  
+            <Button
+              version="btn-danger"
+              validate
+              type="button"
+              className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200 active:bg-slate-500"
+              text="Eliminar"
+            />
+          </div>
         </div>
       </form>
     </dialog>
