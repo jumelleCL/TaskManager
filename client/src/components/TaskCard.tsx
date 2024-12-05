@@ -11,7 +11,7 @@ type Props = {
     status?: string;
     assigned_to?: number;
   };
-  member: UserSimple[];
+  member: UserSimple[] | null ;
   onTaskCreated: () => void;
   priority: string;
   children: React.ReactNode;

@@ -20,7 +20,7 @@ type Props = {
   priority?: string;
   status?: string;
   onTaskCreated?: () => void;
-  member: UserSimple[]
+  member: UserSimple[] | null
 };
 const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
   props: Props,
@@ -104,7 +104,6 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
           required={false}
           className="mt-4"
           validate
-          error={errors.description}
           {...register("description")}
         />
         <div>
@@ -137,7 +136,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
           validate
           type="submit"
           className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200 active:bg-slate-500"
-          text="Submit"
+          text="Cambiar"
         />
         </div>
       </form>

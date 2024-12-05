@@ -5,7 +5,6 @@ import db from "../Pool";
 import { addProjectSchema, idSchema } from "../../../schemas/projectSchemas";
 import { projects, projectsMembers, tasks, users } from "../db/schema";
 import ValidationError from "../models/ValidationError";
-import { JwtPayload } from "jsonwebtoken";
 
 const getAll: RequestHandler = async (req, res) => {
     const search = req.query.search;

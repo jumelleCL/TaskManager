@@ -4,10 +4,13 @@ import axiosApi from "../config/axiosApi";
 import { Proyects, Tasks } from "../types";
 import FormTask from "../components/Forms/FormTask";
 import TaskCard from "../components/TaskCard";
+import useUserContext from "../hooks/UseUserContext";
 
 export type UserSimple = { userId: number; username: string };
 
 export default function ProyectTask() {
+  const userContext = useUserContext();
+
   const { id } = useParams();
   const [task, setTask] = useState<Tasks[]>([]);
   const [project, setProject] = useState<Proyects>();
@@ -18,7 +21,8 @@ export default function ProyectTask() {
         setTask(resp.data.tasks);
         setProject(resp.data.project);
       })
-      .catch(() => {
+      .catch((e) => {
+        if(e.response.status === 401) userContext.logOut()
         window.location.href = "/404";
       });
   };
@@ -33,6 +37,7 @@ export default function ProyectTask() {
       })
       .catch((e) => {
         console.error(e.response.data.message);
+        if(e.response.status === 401) userContext.logOut()
       });
   }, []);
   return (

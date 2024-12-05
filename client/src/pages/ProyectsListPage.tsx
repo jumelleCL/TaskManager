@@ -5,10 +5,12 @@ import ProyectCard from "../components/ProyectCard";
 import { Proyects } from "../types";
 import { NavLink } from "react-router-dom";
 import Input from "../components/design/Input";
+import useUserContext from "../hooks/UseUserContext";
 
 export default function ProyectsListPage() {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
+  const userContext = useUserContext();
   // Busqueda
   const searchRef = useRef<HTMLInputElement>(null);
   const [search, setSearch] = useState<string>('');
@@ -31,7 +33,7 @@ export default function ProyectsListPage() {
         setProyects(Array.isArray(resp.data) ? resp.data : []);
       })
       .catch((e) => {
-        console.error(e.response.data.message);
+        if(e.response.status === 401) userContext.logOut()
       });
   };
   useEffect(() => {    
