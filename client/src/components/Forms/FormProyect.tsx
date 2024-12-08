@@ -53,9 +53,8 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
         } else return;
       })
       .catch((e) => {
-        if(e.response.data.status === 401) userContext.logOut()
+        if(e.response.status === 401) userContext.logOut()
         console.error(e);
-        
       });
   }
   return (

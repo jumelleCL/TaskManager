@@ -1,21 +1,59 @@
 import { NavLink } from "react-router-dom";
 import Button from "../components/design/Button";
 import useUserContext from "../hooks/UseUserContext";
-import Phone3d from "../components/Phone3d";
+import { FaRegCircle } from "react-icons/fa";
 
 function Home() {
-  const {user} = useUserContext()
+  const { user } = useUserContext();
   return (
-    <div className="flex h-full flex-col md:flex-row items-center justify-evenly w-full">
-      <div className="flex flex-col gap-16 ml-40">
-        <p className="font-bold text-4xl">Welcome to your</p>
-        <p className="font-bold text-4xl bg-gradient-to-r from-blue-400 to-blue-800 text-transparent bg-clip-text">task manager</p>
-        {!user && <NavLink to='/login'><Button text="Create your proyect!" className="text-white"/></NavLink>}
-        {user && <NavLink to='/proyects'><Button text="Create your proyect!" className="text-white"/></NavLink>}
+    <div className="relative flex h-full flex-col items-center justify-center gap-20 w-full bg-secondary overflow-hidden">
+      <FaRegCircle
+        color="#3260F4"
+        className="absolute -top-20 -left-20 w-52 h-52 md:w-96 md:h-96 opacity-50 animate-float"
+      />
+      <FaRegCircle
+        color="#3260F4"
+        className="absolute -top-40 left-2/4 w-72 h-72 opacity-10 animate-float"
+      />
+      <FaRegCircle
+        color="#3260F4"
+        className="absolute top-1/4 -right-40 w-60 h-60 md:w-80 md:h-80 0 opacity-70 animate-float"
+      />
+      <FaRegCircle
+        color="#3260F4"
+        className="absolute -bottom-32 left-1/4 w-64 h-64 opacity-10 animate-float"
+      />
+      <FaRegCircle
+        color="#3260F4"
+        className="absolute -bottom-50 left-1/4 w-10 h-10 opacity-10 animate-float"
+      />
+
+      <div className="flex items-center text-center">
+        <h1 className="text-5xl font-bold text-gray-primary flex flex-col items-center">
+          Organize your proyects easily with 
+         
+            <span>Task<span className="text-[#9FB1EB]">Manager</span></span>
+        </h1>
       </div>
-      <div className="max-w-max">
-        {/* <img className="max-w-md" src="https://taskio.app/images/hero.png" alt="" /> */}
-        <Phone3d/>
+      <div className="">
+        {!user && (
+          <NavLink to="/login">
+            <Button
+              version="btn-primary"
+              text="Create your proyect!"
+              className="text-white"
+            />
+          </NavLink>
+        )}
+        {user && (
+          <NavLink to="/proyects">
+            <Button
+              version="btn-primary"
+              text="Create your proyect!"
+              className="text-white"
+            />
+          </NavLink>
+        )}
       </div>
     </div>
   );

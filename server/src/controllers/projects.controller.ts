@@ -3,7 +3,7 @@ import { and, eq, like } from "drizzle-orm";
 import HttpError from "../models/HttpError";
 import db from "../Pool";
 import { addProjectSchema, idSchema } from "../../../schemas/projectSchemas";
-import { projects, projectsMembers, tasks, users } from "../db/schema";
+import { projects, tasks, users, usersjoinprojects } from "../db/schema";
 import ValidationError from "../models/ValidationError";
 
 const getAll: RequestHandler = async (req, res) => {
@@ -12,9 +12,8 @@ const getAll: RequestHandler = async (req, res) => {
         id: projects.id,
         name: projects.name,
         description: projects.description,
-        startDate: projects.startDate,
-        endDate: projects.endDate,
-        createdAt: projects.createdAt,
+        startDate: projects.startAndCreatedAt,
+        endDate: projects.endAt,
         modifiedAt: projects.modifiedAt,
     }
 
@@ -22,12 +21,12 @@ const getAll: RequestHandler = async (req, res) => {
         let result;
         if (search) {
             result = await db.select(data).from(projects)
-                .innerJoin(projectsMembers, eq(projects.id, projectsMembers.projectId))
-                .where(and(eq(projectsMembers.userId, req.user.id), like(projects.name, `%${search}%`)))
+                .innerJoin(usersjoinprojects, eq(projects.id, usersjoinprojects.projectId))
+                .where(and(eq(usersjoinprojects.userId, req.user.id), like(projects.name, `%${search}%`)))
         } else {
             result = await db.select(data).from(projects)
-                .innerJoin(projectsMembers, eq(projects.id, projectsMembers.projectId))
-                .where(eq(projectsMembers.userId, req.user.id))
+                .innerJoin(usersjoinprojects, eq(projects.id, usersjoinprojects.projectId))
+                .where(eq(usersjoinprojects.userId, req.user.id))
 
         }
 
@@ -46,8 +45,8 @@ const getAllMembers: RequestHandler = async (req, res) => {
     if(!success) throw new ValidationError(error)
 
     try {
-        const result = await db.select({userId: users.id,username: users.name}).from(users).innerJoin(projectsMembers, eq(users.id, projectsMembers.userId))
-            .innerJoin(projects, eq(projects.id, projectsMembers.projectId))
+        const result = await db.select({userId: users.id,username: users.name}).from(users).innerJoin(usersjoinprojects, eq(users.id, usersjoinprojects.userId))
+            .innerJoin(projects, eq(projects.id, usersjoinprojects.projectId))
             .where(eq(projects.id, data))
 
         res.send(result)
@@ -67,10 +66,10 @@ const getOne: RequestHandler = async (req, res) => {
         const resultProject = await db.select().from(projects).where(eq(projects.id, data))
 
         // Verificamos si el usuario tiene permisos en el proyecto
-        const [isProjectFromUser] = await db.select().from(projectsMembers)
+        const [isProjectFromUser] = await db.select().from(usersjoinprojects)
             .where(
-                and(eq(resultProject[0].id, projectsMembers.projectId),
-                    eq(projectsMembers.userId, req.user.id))
+                and(eq(resultProject[0].id, usersjoinprojects.projectId),
+                    eq(usersjoinprojects.userId, req.user.id))
             )
         if (!isProjectFromUser) throw new HttpError(401, 'No podés ver este proyecto')
 
@@ -90,12 +89,12 @@ async function createProyect(user_id: number, name: string, description: string,
         const values: newProject = {
             name: name,
             description: description,
-            startDate: start_date,
-            endDate: end_date
+            startAndCreatedAt: start_date,
+            endAt: end_date
         }
         const proyect = await db.insert(projects).values(values).returning({ insertedId: projects.id })
 
-        await db.insert(projectsMembers).values({ role: 'admin', projectId: proyect[0].insertedId, userId: user_id })
+        await db.insert(usersjoinprojects).values({ role: 'admin', projectId: proyect[0].insertedId, userId: user_id })
         return proyect;
     } catch (e) {
         console.log(e);

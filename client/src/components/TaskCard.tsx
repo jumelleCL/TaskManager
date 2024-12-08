@@ -51,7 +51,7 @@ export default function TaskCard({
       )}
       <button
         onClick={() => dialogRef.current?.showModal()}
-        className={`${classes} border-t-8 text-xl` }
+        className={`${classes} border-t-[1.2vh] text-xl` }
       >
         {children}
       </button>

@@ -50,7 +50,6 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
 
   function handleChange(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("submit");
 
     const data = {
       projectId: proyect,
@@ -71,7 +70,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
         } else return;
       })
       .catch((e) => {
-        if(e.response.data.status === 401) userContext.logOut()
+        if(e.response.status === 401) {userContext.logOut()}
         console.error(e.response.data.message);
       });
   }
@@ -79,7 +78,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
   return (
     <dialog
       ref={refToUse}
-      className="p-4 rounded-xl min-w-[70%] py-5 bg-white border-t-[5vh] border-t-primary"
+      className="p-4 rounded-xl min-w-[90%] md:min-w-[70%] lg:min-w-[50%] py-5 bg-white border-t-[5vh] border-t-primary"
     >
       <form onSubmit={handleChange}>
         <div className="flex justify-between items-center mb-5 p-4">
@@ -87,7 +86,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
           <Button
             version="btn-icon"
             type="button"
-            className="flex justify-center text-black items-center rounded-3xl p-0 py-1"
+            className="flex justify-center text-black items-center rounded-3xl p-0 py-1 focus:border-none"
             onClick={() => {
               refToUse.current?.close();
             }}

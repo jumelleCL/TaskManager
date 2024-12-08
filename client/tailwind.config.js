@@ -3,6 +3,15 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      animation: {
+        float: "float 6s ease-in-out infinite",
+      },
+      keyframes: {
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(15px)" },
+        },
+      },
       colors: {
         'primary': "#3260F4",
         'primary-hover': '#6D8FFC',
@@ -13,13 +22,14 @@ module.exports = {
 
         'red-danger': '#EB5659',
         'red-danger-hover': '#FB8A8C',
-        'red-primary': '#FFA5A5',
+
+        'red-primary': '#F27373',
         'red-disable': '#FFD5D5',
 
-        'yellow-primary': '#FDE047',
+        'yellow-primary': '#F0D131',
         'yellow-disable': '#FCEFA8',
 
-        'green-primary': '#86EFAC',
+        'green-primary': '#7DE16E',
         'green-disable': '#C3F8D6',
 
       },

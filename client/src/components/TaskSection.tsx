@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import { UserSimple } from "../pages/ProyectPage";
 import { Tasks } from "../types";
 import FormTask from "./Forms/FormTask"

@@ -5,10 +5,10 @@ import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   return (
-    <div className="flex flex-col min-h-screen w-screen">
+    <div className="flex flex-col h-screen w-screen">
       <UserProvider>
       <Header />
-        <main className="flex-grow flex items-start justify-center w-full overflow-hidden">
+        <main className="h-full flex items-start justify-center w-full overflow-hidden">
           <AppRoutes />
         </main>
       </UserProvider>

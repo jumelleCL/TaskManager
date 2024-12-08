@@ -1,6 +1,7 @@
 // import { FaUserCircle } from "react-icons/fa";
-import AppLink from "../design/AppLink";
 import useUserContext from "../../hooks/UseUserContext";
+import Button from "../design/Button";
+import { NavLink } from "react-router-dom";
 
 type Props = {
   vertical?: boolean;
@@ -20,27 +21,19 @@ export default function Menu({ vertical }: Props) {
         vertical && "flex-col"
       }`}
     >
-      {/* {navItems.map(
-        (item) =>
-          (item.public && !user) ||
-          (!item.public && user && (
-            <AppLink
-              key={item.name}
-              name={item.name}
-              path={item.path}
-              className="text-slate-300"
-            />
-          ))
-      )} */}
-      {user && <li onClick={handleLogOut} className="text-slate-300 cursor-pointer">Log out</li>}
+      {user && (
+        <li onClick={handleLogOut} className="text-slate-300 cursor-pointer">
+          Log out
+        </li>
+      )}
       {!user && (
         <>
-          <AppLink name="Login" path="/login" className="text-slate-300" />
-          <AppLink
-            name="Register"
-            path="/register"
-            className="text-slate-300"
-          />
+          <NavLink to={'/login'}>
+            <Button version="btn-icon" text="LogIn" />
+          </NavLink>
+          <NavLink to={'/register'}>
+            <Button version="btn-primary" text="SignUp" />
+          </NavLink>
         </>
       )}
     </ul>
