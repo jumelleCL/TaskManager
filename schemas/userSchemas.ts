@@ -13,7 +13,7 @@ const AddUserSchema = z.object({
     password: z
         .string()
         .min(1, 'Password required')
-        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, 'Password invalid')
+        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, 'Password must be 8+ characters, with a capital and a number')
         .max(16, 'Max 16 characters'),
 });
 

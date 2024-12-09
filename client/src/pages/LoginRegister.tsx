@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import FormLogin from "../components/Forms/FormLogin";
+import FormRegister from "../components/Forms/FormRegister";
 
 export default function LoginRegister() {
   const location = useLocation();
@@ -20,50 +22,21 @@ export default function LoginRegister() {
   return (
     <Container className={`container ${isActive ? "active" : ""}`}>
       <div className="form-box login">
-            <form action="">
-                <h1>Login</h1> 
-                <div className="input-box">
-                    <input type="text" name="Username" id="username" placeholder="Username"/>
-                    <i className="bx bxs-user"></i>
-                </div>
-                <div className="input-box">
-                    <input type="password" name="Password" id="password" placeholder="Password"/>
-                    <i className="bx bxs-lock-alt"></i>
-                </div>
-                <div className="forgot-link">
-                    <a href="#">Forgot password?</a>
-                </div>
-                <button className="btn" type="submit">Login</button>
-            </form>
+            <FormLogin/>
         </div>
 
         <div className="form-box register">
-            <form action="">
-                <h1>Register</h1> 
-                <div className="input-box">
-                    <input type="text" name="Username" id="username" placeholder="Username"/>
-                    <i className="bx bxs-user"></i>
-                </div>
-                <div className="input-box">
-                    <input type="text" name="Email" id="email" placeholder="Email"/>
-                    <i className="bx bxs-envelope"></i>
-                </div>
-                <div className="input-box">
-                    <input type="password" name="Password" id="password" placeholder="Password"/>
-                    <i className="bx bxs-lock-alt"></i>
-                </div>
-                <button className="btn" type="submit">Register</button>
-            </form>
+            <FormRegister/>
         </div>
 
 
         <div className="toggle-box">
             <div className="toggle-panel toggle-left">
-                <p>Yo don't have an account with us?</p>
+                <p>You don't have an account with us?</p>
                 <button className="btn register-btn" onClick={toggleActive}>Register</button>
             </div>
             <div className="toggle-panel toggle-right">
-                <p>You already have an accout with us?</p>
+                <p>You already have an account with us?</p>
                 <button className="btn login-btn" onClick={toggleActive}>Login</button>
             </div>
         </div>
@@ -113,47 +86,7 @@ const Container = styled.div`
     right: 50%;
   }
 
-  form {
-    width: 100%;
-  }
-
-  .input-box {
-    position: relative;
-    margin: 30px 0;
-    input {
-      width: 100%;
-      padding: 13px 50px 13px 20px;
-      background: #eee;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      font-size: 16px;
-      color: #333;
-      font-weight: 500;
-    }
-    input::placeholder {
-      color: #888;
-      font-weight: 400;
-    }
-    i {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 20px;
-      color: #888;
-    }
-  }
-
-  .forgot-link {
-    margin: -15px 0 15px;
-    a {
-      font-size: 14.5px;
-      color: #333;
-      text-decoration: none;
-    }
-  }
-
+  
   .btn {
     width: 100%;
     height: 48px;
@@ -231,7 +164,7 @@ const Container = styled.div`
       height: calc(100vh - 20px);
     }
     .form-box {
-      bottom: 0;
+      bottom: 9%;
       width: 100%;
       height: 70%;
     }
@@ -241,14 +174,14 @@ const Container = styled.div`
     }
     &.active .toggle-box::before {
       left: 0;
-      top: 70%;
+      top: 67%;
     }
     &.active .toggle-panel.toggle-left {
       left: 0;
       top: -30%;
     }
     &.active .toggle-panel.toggle-right {
-      bottom: 0;
+      bottom: 9%;
     }
 
     .toggle-box {
