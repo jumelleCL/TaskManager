@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import {Home, PrivateRoute, ProyectsListPage, PublicRoute, Error404, ProyectPage} from './Routes'
-import LoginRegister from "../pages/LoginRegister";
+import {Home, PrivateRoute, ProyectsListPage, PublicRoute, Error404, ProyectPage, LoginRegister} from './Routes'
 
 export default function AppRoutes() {
   return (

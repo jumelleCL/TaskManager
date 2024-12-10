@@ -21,6 +21,7 @@ type Props = {
   status?: string;
   onTaskCreated?: () => void;
   member: UserSimple[] | null;
+  className?: string;
 };
 const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
   props: Props,
@@ -78,7 +79,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
   return (
     <dialog
       ref={refToUse}
-      className="p-4 rounded-xl min-w-[90%] md:min-w-[70%] lg:min-w-[50%] py-5 bg-white border-t-[5vh] border-t-primary"
+      className={`p-4 rounded-xl min-w-[90%] md:min-w-[70%] lg:min-w-[50%] py-5 bg-white border-t-[5vh] border-t-primary ${props.className}`}
     >
       <form onSubmit={handleChange}>
         <div className="flex justify-between items-center mb-5 p-4">

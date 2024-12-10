@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useUserContext from "../../hooks/UseUserContext";
 import { AddUserSchema } from "../../../../schemas/userSchemas";
 import axiosApi from "../../config/axiosApi";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 type RegisterValues = {
   username: string;
@@ -21,7 +22,12 @@ export default function FormRegister() {
   const { errors, isValid } = formState;
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const userContext = useUserContext();
+  const userContext = useUserContext();  
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleShowPSW = () => {
+    setShowPassword(!showPassword); 
+  };
 
   const handleRegister = () => {
     const data = {
@@ -65,12 +71,12 @@ export default function FormRegister() {
         {errors.email && <span className="error">{errors.email.message}</span>}
       </div>
       <div className="input-box">
-        <input
-          type="password"
+      <input
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
           {...register("password")}
         />
-        <i className="bx bxs-lock-alt"></i>
+        <i onClick={handleShowPSW} className="cursor-pointer">{showPassword ? <FaEyeSlash /> : <FaEye />}</i>
         {errors.password && <span className="error">{errors.password.message}</span>}
       </div>
       <button className="btn" type="submit" disabled={!isValid}>
