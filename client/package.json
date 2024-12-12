@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "install-root": "cd .. && npm install",
     "install-client": "cd ./client && npm install",
-    "preinstall": "npm install-client && npm run install-root"
+    "preinstall": " npm run install-root && npm install-client"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
