@@ -7,6 +7,7 @@ import axiosApi from "../../config/axiosApi";
 import useUserContext from "../../hooks/UseUserContext";
 import { addProjectSchema } from "../../../../schemas/projectSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 type Props = {
   className?: string;
@@ -24,7 +25,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
   const userContext = useUserContext()
   const { register, handleSubmit, formState, watch } = useForm<FormValues>({
     mode: "onChange",
-    resolver: zodResolver(addProjectSchema),
+    resolver: zodResolver(addProjectSchema as unknown as z.ZodType<object>),
   });
 
   const { errors, isValid } = formState;

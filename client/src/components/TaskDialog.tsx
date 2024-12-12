@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import { UserSimple } from "../pages/ProyectPage";
 import useUserContext from "../hooks/UseUserContext";
 import Radio from "./design/Radio";
+import { z } from "zod";
 
 type Props ={
   id?: number;
@@ -34,7 +35,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
   
   const { register, formState, watch } = useForm<Props>({
     mode: "onChange",
-    resolver: zodResolver(AddTaskSchema),
+    resolver: zodResolver(AddTaskSchema as unknown as z.ZodType<object>),
     defaultValues: {
       title: props.title,
       description: props.description,

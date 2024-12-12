@@ -6,6 +6,7 @@ import useUserContext from "../../hooks/UseUserContext";
 import { AddUserSchema } from "../../../../schemas/userSchemas";
 import axiosApi from "../../config/axiosApi";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { z } from "zod";
 
 type RegisterValues = {
   username: string;
@@ -16,7 +17,7 @@ type RegisterValues = {
 export default function FormRegister() {
   const { register, handleSubmit, formState, watch } = useForm<RegisterValues>({
     mode: "onChange",
-    resolver: zodResolver(AddUserSchema),
+    resolver: zodResolver(AddUserSchema as unknown as z.ZodType<object>),
   });
 
   const { errors, isValid } = formState;

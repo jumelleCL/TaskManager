@@ -6,6 +6,7 @@ import useUserContext from "../../hooks/UseUserContext";
 import { LoginSchema } from "../../../../schemas/userSchemas";
 import axiosApi from "../../config/axiosApi";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { z } from "zod";
 
 type LoginValues = {
   username: string;
@@ -15,7 +16,7 @@ type LoginValues = {
 export default function FormLogin() {
   const { register, handleSubmit, formState, watch } = useForm<LoginValues>({
     mode: "onChange",
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(LoginSchema as unknown as z.ZodType<object>),
   });
 
   const { errors, isValid } = formState;
