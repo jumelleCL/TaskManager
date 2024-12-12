@@ -4,8 +4,7 @@ CREATE TABLE Users (
     name VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 DROP TABLE IF EXISTS Projects;
@@ -14,8 +13,7 @@ CREATE TABLE Projects (
     name VARCHAR(255) NOT NULL,
     description TEXT,
     start_and_created_at DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    end_at DATE NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL '15' day),
-    modified_at DATE NOT NULL DEFAULT CURRENT_TIMESTAMP
+    end_at DATE NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL '15' day)
 );
 
 DROP TABLE IF EXISTS UsersJoinProjects;
@@ -39,20 +37,8 @@ CREATE TABLE Tasks (
     status VARCHAR(255) CHECK(status IN('pending', 'in_progress', 'completed')) NOT NULL,
     due_date DATE NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL '30' day),
     created_at DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modified_at DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (project_id) REFERENCES Projects(id) ON DELETE CASCADE,
     FOREIGN KEY (assigned_to) REFERENCES Users(id) ON DELETE CASCADE
-);
-
-DROP TABLE IF EXISTS Activity_log;
-CREATE TABLE Activity_log(
-    user_id INT NOT NULL,
-    task_id INT NOT NULL,
-    activity_type VARCHAR(255) CHECK(activity_type IN('created', 'updated_status', 'comented','added_attachment')),
-    timestamp DATE NOT NULL,
-    PRIMARY KEY (user_id, task_id),
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
-    FOREIGN KEY (task_id) REFERENCES Tasks(id) ON DELETE CASCADE
 );
 
 

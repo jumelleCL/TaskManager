@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm/relations";
-import { projects, tasks, users, usersjoinprojects, activityLog } from "./schema";
+import { projects, tasks, users, usersjoinprojects } from "./schema";
 
-export const tasksRelations = relations(tasks, ({one, many}) => ({
+export const tasksRelations = relations(tasks, ({one}) => ({
 	project: one(projects, {
 		fields: [tasks.projectId],
 		references: [projects.id]
@@ -10,7 +10,6 @@ export const tasksRelations = relations(tasks, ({one, many}) => ({
 		fields: [tasks.assignedTo],
 		references: [users.id]
 	}),
-	activityLogs: many(activityLog),
 }));
 
 export const projectsRelations = relations(projects, ({many}) => ({
@@ -21,7 +20,6 @@ export const projectsRelations = relations(projects, ({many}) => ({
 export const usersRelations = relations(users, ({many}) => ({
 	tasks: many(tasks),
 	usersjoinprojects: many(usersjoinprojects),
-	activityLogs: many(activityLog),
 }));
 
 export const usersjoinprojectsRelations = relations(usersjoinprojects, ({one}) => ({
@@ -32,16 +30,5 @@ export const usersjoinprojectsRelations = relations(usersjoinprojects, ({one}) =
 	user: one(users, {
 		fields: [usersjoinprojects.userId],
 		references: [users.id]
-	}),
-}));
-
-export const activityLogRelations = relations(activityLog, ({one}) => ({
-	user: one(users, {
-		fields: [activityLog.userId],
-		references: [users.id]
-	}),
-	task: one(tasks, {
-		fields: [activityLog.taskId],
-		references: [tasks.id]
 	}),
 }));

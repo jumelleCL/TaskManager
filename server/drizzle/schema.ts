@@ -9,7 +9,6 @@ export const projects = pgTable("projects", {
 	description: text(),
 	startAndCreatedAt: date("start_and_created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 	endAt: date("end_at").default(sql`(CURRENT_TIMESTAMP + '15 days'::interval day)`).notNull(),
-	modifiedAt: date("modified_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
 
 export const users = pgTable("users", {
@@ -18,7 +17,6 @@ export const users = pgTable("users", {
 	email: varchar({ length: 255 }).notNull(),
 	password: varchar({ length: 255 }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
-	modifiedAt: timestamp("modified_at", { mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
 }, (table) => {
 	return {
 		usersNameKey: unique("users_name_key").on(table.name),
@@ -36,7 +34,6 @@ export const tasks = pgTable("tasks", {
 	status: varchar({ length: 255 }).notNull(),
 	dueDate: date("due_date").default(sql`(CURRENT_TIMESTAMP + '30 days'::interval day)`).notNull(),
 	createdAt: date("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
-	modifiedAt: date("modified_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
 }, (table) => {
 	return {
 		tasksProjectIdFkey: foreignKey({
@@ -72,27 +69,5 @@ export const usersjoinprojects = pgTable("usersjoinprojects", {
 		}).onDelete("cascade"),
 		usersjoinprojectsPkey: primaryKey({ columns: [table.projectId, table.userId], name: "usersjoinprojects_pkey"}),
 		usersjoinprojectsRoleCheck: check("usersjoinprojects_role_check", sql`(role)::text = ANY ((ARRAY['admin'::character varying, 'member'::character varying])::text[])`),
-	}
-});
-
-export const activityLog = pgTable("activity_log", {
-	userId: integer("user_id").notNull(),
-	taskId: integer("task_id").notNull(),
-	activityType: varchar("activity_type", { length: 255 }),
-	timestamp: date().notNull(),
-}, (table) => {
-	return {
-		activityLogUserIdFkey: foreignKey({
-			columns: [table.userId],
-			foreignColumns: [users.id],
-			name: "activity_log_user_id_fkey"
-		}).onDelete("cascade"),
-		activityLogTaskIdFkey: foreignKey({
-			columns: [table.taskId],
-			foreignColumns: [tasks.id],
-			name: "activity_log_task_id_fkey"
-		}).onDelete("cascade"),
-		activityLogPkey: primaryKey({ columns: [table.userId, table.taskId], name: "activity_log_pkey"}),
-		activityLogActivityTypeCheck: check("activity_log_activity_type_check", sql`(activity_type)::text = ANY ((ARRAY['created'::character varying, 'updated_status'::character varying, 'comented'::character varying, 'added_attachment'::character varying])::text[])`),
 	}
 });

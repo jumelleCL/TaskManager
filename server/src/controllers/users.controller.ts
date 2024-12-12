@@ -56,7 +56,7 @@ const checkUser: RequestHandler = async (req, res) => {
                 const token = jwt.sign({id: result.id, username: result.name }, SECRET!)
                 res.cookie('access_token', token, {
                     httpOnly: true,
-                    expires: new Date(Date.now() + 60 * 60 * 24 * 5),
+                    // expires: new Date(Date.now() + 60 * 60 * 24 * 5),
                     sameSite: 'none',
                     secure: true,
                 })

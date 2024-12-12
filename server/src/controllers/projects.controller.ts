@@ -14,7 +14,6 @@ const getAll: RequestHandler = async (req, res) => {
         description: projects.description,
         startDate: projects.startAndCreatedAt,
         endDate: projects.endAt,
-        modifiedAt: projects.modifiedAt,
     }
 
     try {
@@ -38,14 +37,14 @@ const getAll: RequestHandler = async (req, res) => {
 }
 
 const getAllMembers: RequestHandler = async (req, res) => {
-    
-    const id = Number(req.params.id); 
-    
+
+    const id = Number(req.params.id);
+
     const { success, data, error } = idSchema.safeParse(id)
-    if(!success) throw new ValidationError(error)
+    if (!success) throw new ValidationError(error)
 
     try {
-        const result = await db.select({userId: users.id,username: users.name}).from(users).innerJoin(usersjoinprojects, eq(users.id, usersjoinprojects.userId))
+        const result = await db.select({ userId: users.id, username: users.name }).from(users).innerJoin(usersjoinprojects, eq(users.id, usersjoinprojects.userId))
             .innerJoin(projects, eq(projects.id, usersjoinprojects.projectId))
             .where(eq(projects.id, data))
 
@@ -57,11 +56,11 @@ const getAllMembers: RequestHandler = async (req, res) => {
 }
 
 const getOne: RequestHandler = async (req, res) => {
-    const id =Number( req.params.id);
-    
+    const id = Number(req.params.id);
+
     const { success, data, error } = idSchema.safeParse(id)
-    if(!success) throw new ValidationError(error)
-    
+    if (!success) throw new ValidationError(error)
+
     try {
         const resultProject = await db.select().from(projects).where(eq(projects.id, data))
 
@@ -71,12 +70,17 @@ const getOne: RequestHandler = async (req, res) => {
                 and(eq(resultProject[0].id, usersjoinprojects.projectId),
                     eq(usersjoinprojects.userId, req.user.id))
             )
-        if (!isProjectFromUser) throw new HttpError(401, 'No podés ver este proyecto')
+        if (!isProjectFromUser) throw new HttpError(401, 'No tenes suficientes permisos')
 
 
-        const resultTask = await db.select().from(tasks).where(eq(tasks.projectId, Number(id)))
+        const resultTask = await db.select().from(tasks).where(eq(tasks.projectId, Number(id))).orderBy(tasks.createdAt)
+        const [isAdmin] = await db.select({role: usersjoinprojects.role})
+        .from(users)
+        .innerJoin(usersjoinprojects, eq(users.id, usersjoinprojects.userId))
+        .where(and(eq(users.id, req.user.id), eq(usersjoinprojects.projectId, resultProject[0].id)))
 
-        res.json({ project: resultProject[0], tasks: resultTask });
+
+        res.json({ project: resultProject[0], tasks: resultTask, isAdmin: isAdmin.role});
     } catch (e) {
         throw new HttpError(404, 'No se encuentra el projecto');
     }

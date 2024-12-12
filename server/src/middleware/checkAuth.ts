@@ -10,6 +10,7 @@ export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
     const SECRET = process.env.SECRET_KEY
 
     const payload = jwt.verify(token, SECRET!) as JwtPayload;
+
     req.user = {id: payload.id, name: payload.username};
     next()
 }
