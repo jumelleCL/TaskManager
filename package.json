@@ -6,6 +6,7 @@
     "zod": "^3.24.1"
   },
   "scripts": {
+    "build-client": "cd client && npm run build",
     "install-client": "npm install && cd client && npm install"
   },
   "keywords": [],
