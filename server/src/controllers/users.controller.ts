@@ -38,8 +38,8 @@ const addUser: RequestHandler = async (req, res, next) => {
 }
 
 const checkUser: RequestHandler = async (req, res) => {
-    const user = req.body;    
-
+    const user = req.body;
+    
     const { success, data, error } = LoginSchema.safeParse(user)
     if (!success) {
         throw new ValidationError(error)

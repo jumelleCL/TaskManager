@@ -5,14 +5,16 @@ import { useForm } from "react-hook-form";
 import { forwardRef, useRef } from "react";
 import axiosApi from "../../config/axiosApi";
 import useUserContext from "../../hooks/UseUserContext";
+import { addProjectSchema } from "../../../../schemas/projectSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type Props = {
   className?: string;
   onProyectCreated?: () => void;
 };
 type FormValues = {
-  titul: string;
-  descripcion: string;
+  name: string;
+  description: string;
 };
 
 const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
@@ -22,6 +24,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
   const userContext = useUserContext()
   const { register, handleSubmit, formState, watch } = useForm<FormValues>({
     mode: "onChange",
+    resolver: zodResolver(addProjectSchema),
   });
 
   const { errors, isValid } = formState;
@@ -33,8 +36,8 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
 
   // * Submit // creación de un proyecto
   function onSubmit() {
-    const titul = watch("titul");
-    const desc = watch("descripcion");
+    const titul = watch("name");
+    const desc = watch("description");
     const start_date = new Date(Date.now()).toLocaleString();
     const end_date = new Date(Date.now());
     end_date.setDate(end_date.getDate() + 5).toLocaleString();    
@@ -61,7 +64,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
   return (
     <dialog
       ref={refToUse}
-      className={`bg-gray-primary text-slate-600 p-4 rounded-lg min-w-80 border-l-[20px] border-primary flex-col gap-4 ${className}`}
+      className={`bg-slate-200 text-slate-600 p-4 rounded-lg min-w-[80vw] md:min-w-[50vw] border-l-[20px] border-primary flex-col gap-4 ${className}`}
     >
       <div className="flex justify-between items-center mb-8">
         <h3 className="font-bold text-2xl">Crear Proyecto</h3>
@@ -80,40 +83,21 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
         className="flex flex-col gap-1 text-slate-700"
       >
         <Input
-          error={errors.titul}
+          error={errors.name}
           validate
           type="text"
           label="Título"
+          inputClass="bg-gray-primary"
           maxLength={10}
-          {...register("titul", {
-            required: "titulo requerido",
-            minLength: {
-              value: 3,
-              message: "Mínimo 3 caracteres",
-            },
-            maxLength: {
-              value: 10,
-              message: "Máximo 10 caracteres",
-            },
-          })}
+          {...register("name")}
         />
         <Input
-          error={errors.descripcion}
+          error={errors.description}
           validate
           type="text"
           label="Descripción"
           maxLength={50}
-          {...register("descripcion", {
-            required: "descripcion requerido",
-            minLength: {
-              value: 3,
-              message: "Mínimo 3 caracteres",
-            },
-            maxLength: {
-              value: 50,
-              message: "Máximo 50 caracteres",
-            },
-          })}
+          {...register("description")}
         />
 
         <div className="flex items-center justify-center">

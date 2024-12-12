@@ -7,7 +7,7 @@ import { Proyects } from "../types";
 export default function ProyectCard({
   name: titul,
   description: descripcio,
-  end_date: endDate,
+  endDate: endDate,
 }: Proyects) {
   console.log(endDate);
   

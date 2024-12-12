@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+  max-height: 100vh;
+}
+
 @layer components {
   .btn-primary {
     @apply bg-primary hover:bg-primary-hover active:bg-primary text-white;
@@ -46,4 +50,9 @@ dialog[open] {
   opacity: 1;
   transform: translateY(-14px);
   visibility: visible;
+}
+
+input:focus ~ .input-text,
+input:not(:placeholder-shown) ~ .input-text{
+  @apply text-blue-500 transform -translate-y-10 -translate-x-2 scale-75;
 }

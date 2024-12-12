@@ -61,7 +61,7 @@ export default function ProyectsListPage() {
               key={proyect.id}
               name={proyect.name}
               description={proyect.description}
-              end_date={proyect.endDate}
+              endDate={proyect.endDate}
             />
           </NavLink>
         ))}

@@ -5,6 +5,8 @@ import styled from "styled-components";
 type Props = ComponentProps<"input"> & {
   type?: string;
   className?: string;
+  inputClass?: string;
+  labelClass?: string;
   label?: string;
   validate?: boolean;
   placeholder?: string;
@@ -12,16 +14,16 @@ type Props = ComponentProps<"input"> & {
 };
 
 const Input = forwardRef<HTMLInputElement, Props>(function Input(
-  { type, className, label, placeholder, validate, error, ...rest }: Props,
+  { type, className, inputClass, labelClass, label, placeholder, validate, error, ...rest }: Props,
   ref
 ) {
   const id = useId();
   return (
     <div className={`${className} relative ${(validate ? 'mb-5' : 'm-0')}`}>
       <InputStyled className={`rounded relative text-slate-700`}>
-        <input ref={ref} id={id} type={type} required {...rest} />
+        <input ref={ref} id={id} type={type} required {...rest} className={inputClass}/>
         {(label || placeholder) && (
-          <label htmlFor={id} className="label-name">
+          <label htmlFor={id} className={`label-name ${labelClass}`}>
             <span className="content-name">{label || placeholder}</span>
           </label>
         )}

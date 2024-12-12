@@ -6,7 +6,7 @@ type Props = ComponentProps<"button"> & {
   error?: string | null;
   text?: string;
   children?: ReactNode;
-  version: 'btn-primary' | 'btn-danger' | 'btn-red' | 'btn-yellow' | 'btn-green' | 'btn-red-disable' | 'btn-yellow-disable' | 'btn-green-disable' | 'btn-icon'
+  version?: 'btn-primary' | 'btn-danger' | 'btn-red' | 'btn-yellow' | 'btn-green' | 'btn-red-disable' | 'btn-yellow-disable' | 'btn-green-disable' | 'btn-icon'
   className?: string;
 };
 export default function Button({
@@ -19,7 +19,7 @@ export default function Button({
   ...rest
 }: Props) {
   const classes = twMerge(
-    "rounded-lg border px-6 py-3 transition-all duration-500",
+    "rounded-lg px-6 py-3 transition-all duration-500",
     version,
     className
   );
