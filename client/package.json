@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "install-root": "cd .. && install",
+    "install-root": "cd .. && npm install",
     "preinstall": "npm run install-root && npm i"
   },
   "dependencies": {
