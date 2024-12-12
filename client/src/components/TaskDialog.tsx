@@ -11,8 +11,9 @@ import axiosApi from "../config/axiosApi";
 import { useParams } from "react-router-dom";
 import { UserSimple } from "../pages/ProyectPage";
 import useUserContext from "../hooks/UseUserContext";
+import Radio from "./design/Radio";
 
-type Props = {
+type Props ={
   id?: number;
   title?: string;
   description?: string;
@@ -26,10 +27,11 @@ type Props = {
 const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
   props: Props,
   externalRef
+  
 ) {
   const proyect = Number(useParams().id);
-  const userContext = useUserContext()
-
+  const userContext = useUserContext();
+  
   const { register, formState, watch } = useForm<Props>({
     mode: "onChange",
     resolver: zodResolver(AddTaskSchema),
@@ -40,6 +42,13 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
       status: props.status,
     },
   });
+  const colorClasses = {
+    low: "border-green-primary",
+    medium: "border-yellow-primary",
+    high: "border-red-primary",
+  };
+  
+  const border = props.priority === 'low' || props.priority === 'medium' || props.priority === 'high' ? colorClasses[props.priority] : colorClasses['low']
 
   const { errors } = formState;
 
@@ -61,7 +70,8 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
       priority: watch("priority"),
       status: watch("status"),
     };
-
+    console.log(data);
+    
     axiosApi
       .put("/api/tasks", data)
       .then((resp) => {
@@ -71,7 +81,9 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
         } else return;
       })
       .catch((e) => {
-        if(e.response.status === 401) {userContext.logOut()}
+        if (e.response.status === 401) {
+          userContext.logOut();
+        }
         console.error(e.response.data.message);
       });
   }
@@ -79,7 +91,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
   return (
     <dialog
       ref={refToUse}
-      className={`p-4 rounded-xl min-w-[90%] md:min-w-[70%] lg:min-w-[50%] py-5 bg-white border-t-[5vh] border-t-primary ${props.className}`}
+      className={`p-4 rounded-xl min-w-[90%] md:min-w-[70%] lg:min-w-[50%] py-5 bg-white border-t-[5vh] ${border} ${props.className}`}
     >
       <form onSubmit={handleChange}>
         <div className="flex justify-between items-center mb-5 p-4">
@@ -97,7 +109,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
         </div>
         <div className="grid min-w-full">
           <Input
-          className="rounded-4xl"
+            className="rounded-4xl"
             validate
             error={errors.title}
             label="title"
@@ -114,19 +126,15 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
         <div>
           <div className="flex items-center my-4">
             <p className="mr-4">Prioridad</p>
-            <Select {...register("priority")}>
-              <option value="low">Low</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-            </Select>
+            <Radio label="Low" priority="low"  value='low'{...register('priority')}/>
+            <Radio label="Medium" priority="medium" value='medium' {...register('priority')}/>
+            <Radio label="High" priority="high" value='high' {...register('priority')}/>
           </div>
           <div className="flex items-center my-4">
             <p className="mr-4">Estado</p>
-            <Select {...register("status")}>
-              <option value="pending">Pending</option>
-              <option value="in_progress">In progress</option>
-              <option value="completed">Completed</option>
-            </Select>
+            <Radio label="Pending" value='pending' {...register('status')}/>
+            <Radio label="In progress" value='in_progress' {...register('status')}/>
+            <Radio label="Completed" value='completed' {...register('status')}/>
           </div>
           <div className="flex items-center my-4">
             <p className="mr-4">Asignar</p>
@@ -147,7 +155,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
               className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200 active:bg-slate-500"
               text="Cambiar"
             />
-  
+
             <Button
               version="btn-danger"
               validate

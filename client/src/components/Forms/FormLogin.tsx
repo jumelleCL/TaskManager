@@ -42,8 +42,7 @@ export default function FormLogin() {
         }
       })
       .catch((err) => {
-        console.error(err.response?.data?.message || "Login error");
-        setFetchError(err.response?.data?.message || "Login error");
+        setFetchError(err.response?.data?.message);
       });
   };
 

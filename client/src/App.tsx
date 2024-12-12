@@ -8,11 +8,10 @@ function App() {
     <div className="flex flex-col h-screen w-screen">
       <UserProvider>
       <Header />
-        <main className="h-full flex items-start justify-center w-full overflow-hidden">
+        <main className="min-h-full flex items-start justify-center w-full">
           <AppRoutes />
         </main>
       </UserProvider>
-      {/* <Footer /> */}
     </div>
   );
 }

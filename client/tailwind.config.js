@@ -24,13 +24,13 @@ module.exports = {
         'red-danger-hover': '#FB8A8C',
 
         'red-primary': '#F27373',
-        'red-disable': '#FFD5D5',
+        'red-disable': '#FDECEC',
 
         'yellow-primary': '#F0D131',
-        'yellow-disable': '#FCEFA8',
+        'yellow-disable': '#FDF7D7',
 
         'green-primary': '#7DE16E',
-        'green-disable': '#C3F8D6',
+        'green-disable': '#E5FFEF',
 
       },
     },

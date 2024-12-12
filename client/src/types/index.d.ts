@@ -3,7 +3,7 @@ type Proyects = {
   id?: number;
   name?: string;
   description?: string;
-  end_date?: Date;
+  endDate?: Date;
 };
 
 type Teams = {

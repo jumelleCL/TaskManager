@@ -9,6 +9,8 @@ export default function ProyectCard({
   description: descripcio,
   end_date: endDate,
 }: Proyects) {
+  console.log(endDate);
+  
   const date = endDate ? (typeof endDate === 'string' ? new Date(Date.parse(endDate)) : endDate ): new Date()
   const formattedDate = date.toLocaleDateString('es', { day: '2-digit', month: 'short'})
   return ( 

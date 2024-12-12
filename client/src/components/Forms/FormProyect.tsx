@@ -35,8 +35,9 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
   function onSubmit() {
     const titul = watch("titul");
     const desc = watch("descripcion");
-    const start_date = "2024-11-20 18:06:59.900";
-    const end_date = "2024-11-30 18:06:59.900";
+    const start_date = new Date(Date.now()).toLocaleString();
+    const end_date = new Date(Date.now());
+    end_date.setDate(end_date.getDate() + 5).toLocaleString();    
 
     const data = {
       name: titul,
@@ -60,16 +61,16 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
   return (
     <dialog
       ref={refToUse}
-      className={`bg-slate-300 text-slate-600 p-4 rounded-lg min-w-80 flex-col gap-4 ${className}`}
+      className={`bg-gray-primary text-slate-600 p-4 rounded-lg min-w-80 border-l-[20px] border-primary flex-col gap-4 ${className}`}
     >
-      <div className="flex justify-between items-center">
-        <h3 className="font-bold">Crear Proyecto</h3>
+      <div className="flex justify-between items-center mb-8">
+        <h3 className="font-bold text-2xl">Crear Proyecto</h3>
         <Button
           version="btn-primary"
           onClick={() => refToUse.current?.close()}
           className="bg-transparent border-none p-0 m-0 flex items-center hover:bg-inherit hover:text-slate-950"
         >
-          <IoIosClose size={30} />
+          <IoIosClose size={30} color="black"/>
         </Button>
       </div>
 
@@ -115,14 +116,16 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
           })}
         />
 
-        <Button
-          version="btn-primary"
-          disabled={!isValid}
-          type="submit"
-          className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200"
-        >
-          Crear
-        </Button>
+        <div className="flex items-center justify-center">
+          <Button
+            version="btn-primary"
+            disabled={!isValid}
+            type="submit"
+            className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200 w-fit"
+          >
+            Crear
+          </Button>
+        </div>
       </form>
     </dialog>
   );

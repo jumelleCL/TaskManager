@@ -29,8 +29,10 @@ export default function TaskCard({
     high: "border-red-primary",
   };
 
+  const border = priority === 'low' || priority === 'medium' || priority === 'high' ? colorClasses[priority] : colorClasses['low']
+
   const classes = `bg-white py-4 px-2 rounded-xl ${
-    colorClasses[priority || "low"]
+    border
   }`;
 
   const dialogRef = useRef<HTMLDialogElement>(null);

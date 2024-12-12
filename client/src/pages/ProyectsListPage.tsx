@@ -37,7 +37,7 @@ export default function ProyectsListPage() {
       });
   };
   useEffect(() => {    
-    fetchProjects();
+    fetchProjects();  
   }, [search]);
 
   return (
@@ -61,7 +61,7 @@ export default function ProyectsListPage() {
               key={proyect.id}
               name={proyect.name}
               description={proyect.description}
-              end_date={proyect.end_date}
+              end_date={proyect.endDate}
             />
           </NavLink>
         ))}
