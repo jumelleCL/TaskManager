@@ -16,7 +16,7 @@ function Header() {
   const {user} = useUserContext()
 
   return (
-    <header className="flex justify-between w-full bg-gray-primary items-center px-10 py-3">
+    <header className="flex justify-between w-full h-16 bg-gray-primary items-center px-10 py-3">
       <NavLink to={user ? '/proyects' : '/'}>
         <Logo/>
       </NavLink>

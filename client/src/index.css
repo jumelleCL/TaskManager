@@ -2,10 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
-  max-height: 100vh;
+.transition-all {
+  transition: all 0.3s ease-in-out;
 }
-
 @layer components {
   .btn-primary {
     @apply bg-primary hover:bg-primary-hover active:bg-primary text-white;

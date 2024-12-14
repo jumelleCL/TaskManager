@@ -6,7 +6,7 @@ import { FaRegCircle } from "react-icons/fa";
 function Home() {
   const { user } = useUserContext();
   return (
-    <div className="relative flex h-full flex-col items-center justify-center gap-20 w-full bg-secondary overflow-hidden">
+    <div className="relative flex h-[calc(100vh-4rem)] flex-col items-center justify-center gap-20 w-full bg-secondary overflow-hidden flex-1">
       <FaRegCircle
         color="#3260F4"
         className="absolute -top-20 -left-20 w-52 h-52 md:w-96 md:h-96 opacity-50 animate-float"

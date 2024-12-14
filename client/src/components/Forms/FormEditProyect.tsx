@@ -6,6 +6,7 @@ import Input from "../design/Input";
 import Button from "../design/Button";
 import axiosApi from "../../config/axiosApi";
 import useUserContext from "../../hooks/UseUserContext";
+import BigInput from "../design/BigInput";
 
 type Props = {
   className?: string;
@@ -110,7 +111,7 @@ const FormEditProyect = forwardRef<HTMLDialogElement, Props>(
               },
             })}
           />
-          <Input
+          <BigInput
             error={errors.descripcion}
             validate
             type="text"
