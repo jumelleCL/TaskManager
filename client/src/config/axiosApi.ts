@@ -2,7 +2,7 @@ import axios from "axios"
 import 'dotenv/config';
 
 const axiosApi = axios.create({
-  baseURL: process.env.URL_SERVER,
+  baseURL: 'https://taskmanager-t1ak.onrender.com',
   timeout: 5000,
   headers: {
     "Content-Type": 'application/json'
@@ -10,6 +10,5 @@ const axiosApi = axios.create({
   },
   withCredentials: true
 });
-
 
 export default axiosApi;
