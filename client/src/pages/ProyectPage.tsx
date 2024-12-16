@@ -62,6 +62,7 @@ export default function ProyectTask() {
               ref={dialogRefEdit}
               titul={project?.name}
               descripcion={project?.description}
+              onProyectCreated={fetchProject}
             />
             <Button
               onClick={() => dialogRefEdit.current?.showModal()}

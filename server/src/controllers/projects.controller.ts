@@ -134,4 +134,28 @@ const addOne: RequestHandler = async (req, res) => {
 }
 
 
-export { getAll, getOne, addOne, getAllMembers }
+const editOne: RequestHandler = async (req, res)=>{
+    const id = Number(req.params.id);
+    
+    
+    const { success: successId, data: dataId, error: errorId } = idSchema.safeParse(id)
+    if (!successId) throw new ValidationError(errorId)
+
+
+    const project = req.body;
+    const { success, data, error } = addProjectSchema.safeParse(project)
+    if (!success) throw new ValidationError(error)
+        
+    try {
+        const result = await db.update(projects).set(data).where(eq(projects.id, dataId))
+        res.send(result);
+    } catch (e) {
+        console.log(e);
+        throw new HttpError(500, 'Error al actualizar el projecto')
+        
+    }
+
+}
+
+
+export { getAll, getOne, addOne, getAllMembers, editOne }
