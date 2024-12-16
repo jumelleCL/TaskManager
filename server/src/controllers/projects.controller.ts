@@ -64,10 +64,11 @@ const getOne: RequestHandler = async (req, res) => {
     try {
         const resultProject = await db.select().from(projects).where(eq(projects.id, data))
 
+        const projectId = resultProject[0].id; 
         // Verificamos si el usuario tiene permisos en el proyecto
         const [isProjectFromUser] = await db.select().from(usersjoinprojects)
             .where(
-                and(eq(resultProject[0].id, usersjoinprojects.projectId),
+                and(eq(projectId, usersjoinprojects.projectId),
                     eq(usersjoinprojects.userId, req.user.id))
             )
         if (!isProjectFromUser) throw new HttpError(401, 'No tenes suficientes permisos')

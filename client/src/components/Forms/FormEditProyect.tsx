@@ -75,16 +75,16 @@ const FormEditProyect = forwardRef<HTMLDialogElement, Props>(
     return (
       <dialog
         ref={refToUse}
-        className={`bg-slate-300 font-normal text-slate-600 p-4 rounded-lg min-w-80 flex-col gap-4 ${className}`}
+        className={`bg-slate-200 text-slate-600 p-4 rounded-lg min-w-[80vw] md:min-w-[50vw] border-l-[20px] border-primary flex-col gap-4 ${className}`}
       >
-        <div className="flex justify-between items-center">
-          <h3 className="font-bold">Editar Proyecto</h3>
+        <div className="flex justify-between items-center mb-8">
+          <h3 className="font-bold text-2xl">Editar Proyecto</h3>
           <Button
             version="btn-primary"
             onClick={() => refToUse.current?.close()}
             className="bg-transparent border-none p-0 m-0 flex items-center hover:bg-inherit hover:text-slate-950"
           >
-            <IoIosClose size={30} />
+            <IoIosClose size={30} color="black" />
           </Button>
         </div>
 
@@ -137,7 +137,7 @@ const FormEditProyect = forwardRef<HTMLDialogElement, Props>(
             type="submit"
             className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200"
           >
-            Crear
+            Cambiar
           </Button>
         </form>
       </dialog>
