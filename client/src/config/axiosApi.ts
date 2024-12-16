@@ -1,5 +1,4 @@
 import axios from "axios"
-import 'dotenv/config';
 
 const axiosApi = axios.create({
   baseURL: 'https://taskmanager-t1ak.onrender.com',
