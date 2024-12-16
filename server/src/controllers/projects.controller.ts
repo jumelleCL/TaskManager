@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { and, eq, like } from "drizzle-orm";
 import HttpError from "../models/HttpError";
 import db from "../Pool";
-import { addProjectSchema, idSchema } from "../../../schemas/projectSchemas";
+import { addProjectSchema, idSchema } from "./../schemas/projectSchemas";
 import { projects, tasks, users, usersjoinprojects } from "../db/schema";
 import ValidationError from "../models/ValidationError";
 

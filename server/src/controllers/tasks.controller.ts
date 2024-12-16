@@ -3,7 +3,7 @@ import HttpError from "../models/HttpError";
 import ValidationError from "../models/ValidationError";
 import { tasks } from "../db/schema";
 import db from "../Pool";
-import { AddTaskSchema, UpdateTaskSchema } from "../../../schemas/taskSchemas";
+import { AddTaskSchema, UpdateTaskSchema } from "./../schemas/taskSchemas";
 import { eq } from "drizzle-orm";
 
 const addTask: RequestHandler = async (req, res) => {

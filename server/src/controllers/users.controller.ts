@@ -6,7 +6,7 @@ import HttpError from "../models/HttpError";
 import 'dotenv/config';
 import db from "../Pool";
 import { users } from "../db/schema";
-import { AddUserSchema, LoginSchema } from "../../../schemas/userSchemas";
+import { AddUserSchema, LoginSchema } from "./../schemas/userSchemas";
 import ValidationError from "../models/ValidationError";
 
 const addUser: RequestHandler = async (req, res, next) => {
