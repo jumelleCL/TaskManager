@@ -39,15 +39,16 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
   function onSubmit() {
     const titul = watch("name");
     const desc = watch("description");
-    const start_date = new Date(Date.now()).toLocaleString();
+    const start_date = new Date(Date.now()).toISOString();
     const end_date = new Date(Date.now());
-    end_date.setDate(end_date.getDate() + 5).toLocaleString();    
+    end_date.setDate(end_date.getDate() + 5);
+    const end_dateString = end_date.toISOString()
 
     const data = {
       name: titul,
       description: desc,
       start_date: start_date,
-      end_date: end_date,
+      end_date: end_dateString,
     };
     axiosApi
       .post("/api/projects", data)

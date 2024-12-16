@@ -124,8 +124,8 @@ const FormEditProyect = forwardRef<HTMLDialogElement, Props>(
                 message: "Mínimo 3 caracteres",
               },
               maxLength: {
-                value: 50,
-                message: "Máximo 50 caracteres",
+                value: 255,
+                message: "Máximo 255 caracteres",
               },
             })}
           />

@@ -43,7 +43,7 @@ dialog{
   opacity: 0;
   visibility: hidden;
   transform: translateY(50px);
-  transition: all .8s ease;
+  transition: all .3s ease;
 }
 
 dialog[open] {
