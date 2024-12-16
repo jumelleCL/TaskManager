@@ -10,6 +10,7 @@ import ValidationError from "./models/ValidationError";
 import { checkAuth } from "./middleware/checkAuth";
 
 const app = express();
+console.log(process.env.CLIENT_URL);
 
 app.use(cookieParser())
 app.use(express.json());

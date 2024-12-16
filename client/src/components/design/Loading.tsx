@@ -9,7 +9,7 @@ export default function Loading() {
       x="0px"
       y="0px"
       viewBox="25 25 50 50"
-      enable-background="new 0 0 0 0"
+      enableBackground="new 0 0 0 0"
       xmlSpace="preserve"
       width={50}
       height={50}

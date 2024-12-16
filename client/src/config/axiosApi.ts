@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const axiosApi = axios.create({
-  baseURL: 'https://taskmanager-t1ak.onrender.com',
+  baseURL: import.meta.env.VITE_SERVER_URL,
   timeout: 5000,
   headers: {
     "Content-Type": 'application/json'
