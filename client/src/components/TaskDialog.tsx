@@ -86,7 +86,6 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
       priority: watch("priority"),
       status: watch("status"),
     };
-    console.log(data);
     
     axiosApi
       .put("/api/tasks", data)

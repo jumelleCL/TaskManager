@@ -3,7 +3,7 @@ import HttpError from "../models/HttpError";
 import ValidationError from "../models/ValidationError";
 import { tasks } from "../db/schema";
 import db from "../Pool";
-import { AddTaskSchema, UpdateTaskSchema } from "./../schemas/taskSchemas";
+import { AddTaskSchema, UpdateStatus, UpdateTaskSchema } from "./../schemas/taskSchemas";
 import { eq } from "drizzle-orm";
 import { idSchema } from "../schemas/projectSchemas";
 
@@ -24,43 +24,58 @@ const addTask: RequestHandler = async (req, res) => {
 }
 
 const updateTask: RequestHandler = async (req, res) => {
-    const { success, data, error } = UpdateTaskSchema.safeParse(req.body);    
+    const { success, data, error } = UpdateTaskSchema.safeParse(req.body);
     if (!success) throw new ValidationError(error)
     type newTask = typeof tasks.$inferInsert;
 
     const values: newTask = {
-        id: data.id, 
-        title: data.title, 
-        description: data.description || null, 
-        priority: data.priority, 
-        status: data.status, 
+        id: data.id,
+        title: data.title,
+        description: data.description || null,
+        priority: data.priority,
+        status: data.status,
         projectId: data.projectId,
         assignedTo: data.assigned_to || null,
     }
-    console.log(values);
-    
-
     try {
         const result = await db.update(tasks).set({
-        title: data.title,
+            title: data.title,
             description: data.description,
             priority: data.priority,
             status: data.status,
             assignedTo: data.assigned_to
         }).where(eq(tasks.id, values.id!))
-    
-        console.log(result);
         res.json(result);
     } catch (e) {
         throw new HttpError(500, 'Fallo al intentar actualizar los datos')
     }
 
-    
+
+}
+
+const updateTaskStatus: RequestHandler = async (req, res) => {
+    const id = Number(req.params.id);
+
+    const { success: successId, data: validatedId, error: errorId } = idSchema.safeParse(id)
+    if (!successId) throw new ValidationError(errorId)
+
+    const { success, data, error } = UpdateStatus.safeParse(req.body);
+    if (!success) throw new ValidationError(error)
+
+        try {
+            const result = await db.update(tasks).set({
+                status: data.status,
+            }).where(eq(tasks.id, validatedId!))
+            res.json(result);
+        } catch (e) {
+            throw new HttpError(500, 'Fallo al intentar actualizar los datos')
+        }
+
 }
 
 const deleteTask: RequestHandler = async (req, res) => {
     const id = Number(req.params.id);
-    
+
     const { success, data: validatedId, error } = idSchema.safeParse(id)
     if (!success) throw new ValidationError(error)
 
@@ -73,4 +88,4 @@ const deleteTask: RequestHandler = async (req, res) => {
 
 }
 
-export { addTask, deleteTask, updateTask }
+export { addTask, deleteTask, updateTask, updateTaskStatus }

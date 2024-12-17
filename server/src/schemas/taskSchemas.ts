@@ -19,4 +19,8 @@ const UpdateTaskSchema = z.object({
     assigned_to: z.number().optional(),
 })
 
-export { AddTaskSchema, UpdateTaskSchema }
+const UpdateStatus = z.object({
+    status: z.enum(['pending', 'in_progress', 'completed']),
+})
+
+export { AddTaskSchema, UpdateTaskSchema, UpdateStatus }
