@@ -58,7 +58,22 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
     !externalRef || typeof externalRef === "function"
       ? internalRef
       : externalRef;
-
+  function handleDelete() {
+    axiosApi
+    .delete(`api/tasks/${props.id}`)
+    .then((resp) => {
+      if (resp.data) {
+        if (props.onTaskCreated) props.onTaskCreated();
+        refToUse.current?.close();
+      } else return;
+    })
+    .catch((e) => {
+      if (e.response.status === 401) {
+        userContext.logOut();
+      }
+      console.error(e.response.data.message);
+    });
+  }
   function handleChange(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -159,6 +174,7 @@ const TaskDialog = forwardRef<HTMLDialogElement, Props>(function TaskDialog(
 
             <Button
               version="btn-danger"
+              onClick={handleDelete}
               validate
               type="button"
               className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200 active:bg-slate-500"

@@ -5,6 +5,7 @@ import { tasks } from "../db/schema";
 import db from "../Pool";
 import { AddTaskSchema, UpdateTaskSchema } from "./../schemas/taskSchemas";
 import { eq } from "drizzle-orm";
+import { idSchema } from "../schemas/projectSchemas";
 
 const addTask: RequestHandler = async (req, res) => {
     const { success, data, error } = AddTaskSchema.safeParse(req.body);
@@ -57,4 +58,19 @@ const updateTask: RequestHandler = async (req, res) => {
     
 }
 
-export { addTask, updateTask }
+const deleteTask: RequestHandler = async (req, res) => {
+    const id = Number(req.params.id);
+    
+    const { success, data: validatedId, error } = idSchema.safeParse(id)
+    if (!success) throw new ValidationError(error)
+
+    try {
+        const result = await db.delete(tasks).where(eq(tasks.id, validatedId))
+        res.send(result)
+    } catch (e) {
+        throw new HttpError(500, 'Error al eliminar la tarea')
+    }
+
+}
+
+export { addTask, deleteTask, updateTask }
