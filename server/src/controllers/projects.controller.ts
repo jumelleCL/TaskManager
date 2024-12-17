@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { and, eq, like } from "drizzle-orm";
+import { and, eq, ilike } from "drizzle-orm";
 import HttpError from "../models/HttpError";
 import db from "../Pool";
 import { addProjectSchema, EmailSchema, idSchema } from "./../schemas/projectSchemas";
@@ -29,7 +29,7 @@ const getAll: RequestHandler = async (req, res) => {
         .where(
           and(
             eq(usersjoinprojects.userId, req.user.id),
-            like(projects.name, `%${search}%`)
+            ilike(projects.name, `%${search}%`)
           )
         );
     } else {

@@ -12,7 +12,7 @@ export default function ProyectCard({
   console.log(endDate);
   
   const date = endDate ? (typeof endDate === 'string' ? new Date(Date.parse(endDate)) : endDate ): new Date()
-  const formattedDate = date.toLocaleDateString('es', { day: '2-digit', month: 'short'})
+  const formattedDate = date.toLocaleDateString('en', { day: '2-digit', month: 'short'})
   return ( 
     <div
       className={`rounded-3xl bg-gray-primary text-secondary flex items-center justify-between h-40 overflow-hidden
