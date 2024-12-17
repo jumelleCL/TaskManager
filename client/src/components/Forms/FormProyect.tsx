@@ -69,7 +69,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
       className={`bg-slate-200 text-slate-600 p-4 rounded-lg min-w-[80vw] md:min-w-[50vw] border-l-[20px] border-primary flex-col gap-4 ${className}`}
     >
       <div className="flex justify-between items-center mb-8">
-        <h3 className="font-bold text-2xl">Crear Proyecto</h3>
+        <h3 className="font-bold text-2xl">Create Project</h3>
         <Button
           version="btn-primary"
           onClick={() => refToUse.current?.close()}
@@ -88,17 +88,17 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
           error={errors.name}
           validate
           type="text"
-          label="Título"
+          label="Title"
           inputClass="bg-gray-primary"
-          maxLength={10}
+          maxLength={30}
           {...register("name")}
         />
         <Input
           error={errors.description}
           validate
           type="text"
-          label="Descripción"
-          maxLength={50}
+          label="Description"
+          maxLength={180}
           {...register("description")}
         />
 
@@ -109,7 +109,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
             type="submit"
             className="disabled:opacity-50 disabled:cursor-not-allowed mt-3.5 text-slate-200 w-fit"
           >
-            Crear
+            Create
           </Button>
         </div>
       </form>

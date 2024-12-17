@@ -1,16 +1,16 @@
 import { z } from 'zod'
 
 const addProjectSchema = z.object({
-    name: z.string().min(1, 'Titulo requerido').min(3, 'Titulo de al menos 3 caracteres'),
-    description: z.string().min(1, 'Descripción requerida').min(3, 'Descripción de al menos 3 caracteres'),
+    name: z.string().min(1, 'Title required').min(3, 'Title at least with 3 char'),
+    description: z.string().min(3, 'Description at least with 3 char').default(''),
     // team_id: z.number().min(1,'Equipo requerido'),
     // start_date: z.string(),
     // end_date: z.string()
 })
 
 const addMembersSchema = z.object({
-    email: z.string().email()
+    email: z.string().email('Email not valid')
 })
 
-const idSchema = z.number().min(1, 'Id requerida')
+const idSchema = z.number().min(1, 'Id required')
 export {addProjectSchema, idSchema, addMembersSchema}

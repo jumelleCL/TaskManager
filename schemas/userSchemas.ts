@@ -4,7 +4,7 @@ const AddUserSchema = z.object({
     username: z
         .string()
         .min(1, 'Name required')
-        .max(10, 'Max 10 characters'),
+        .max(20, 'Max 20 characters'),
     email: z
         .string()
         .min(1, 'Email required')

@@ -55,7 +55,7 @@ export default function ProyectsListPage() {
       {isLoading ? ( // Mostrar el SVG de cargando si está cargando
         <Loading />
       ) : proyects.length === 0 ? (
-        <p className="text-4xl text-secondary mt-10">No hay proyectos</p>
+        <p className="text-4xl text-secondary mt-10">There's no projects</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-8 w-full">
           {proyects.map((proyect) => (

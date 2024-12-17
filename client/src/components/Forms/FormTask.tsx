@@ -40,9 +40,9 @@ const FormTask = forwardRef<HTMLFormElement, Props>(function FormTask({onTaskCre
       className="bg-slate-300 rounded grid grid-cols-3 grid-rows-1"
     >
       <div className="col-start-1 col-end-3">
-        <Input type="text" label="Nueva tarea"  className="rounded-r-none" ref={taskRef}/>
+        <Input type="text" label="New task"  className="rounded-r-none" ref={taskRef}/>
       </div>{" "}
-      <Button version="btn-primary" type="submit" text="Añadir" className="rounded-l-none" />
+      <Button version="btn-primary" type="submit" text="Add" className="rounded-l-none" />
     </form>
   );
 });

@@ -70,7 +70,7 @@ export default function ProyectTask() {
             >
               <FaRegEdit color="white" />
               <span className="absolute left-1/2 transform -translate-x-1/2 mt-2 text-sm text-white bg-gray-800 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                Editar proyecto
+                Edit project
               </span>
             </Button>
 
@@ -81,7 +81,7 @@ export default function ProyectTask() {
             >
               <FaRegShareSquare color="white" />
               <span className="absolute left-1/2 transform -translate-x-1/2 mt-2 text-sm text-white bg-gray-800 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                Compartir
+                Share
               </span>
             </Button>
           </div>
