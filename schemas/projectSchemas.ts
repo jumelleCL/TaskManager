@@ -8,5 +8,9 @@ const addProjectSchema = z.object({
     // end_date: z.string()
 })
 
+const addMembersSchema = z.object({
+    email: z.string().email()
+})
+
 const idSchema = z.number().min(1, 'Id requerida')
-export {addProjectSchema, idSchema}
+export {addProjectSchema, idSchema, addMembersSchema}

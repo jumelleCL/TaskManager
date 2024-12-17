@@ -74,7 +74,7 @@ export default function ProyectTask() {
               </span>
             </Button>
 
-            <FormShareProyect />
+            <FormShareProyect ref={dialogRefShare} />
             <Button
               onClick={() => dialogRefShare.current?.showModal()}
               className="relative group"
