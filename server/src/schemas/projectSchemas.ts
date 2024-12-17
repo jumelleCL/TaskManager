@@ -9,4 +9,14 @@ const addProjectSchema = z.object({
 })
 
 const idSchema = z.number().min(1, 'Id requerida')
-export {addProjectSchema, idSchema}
+
+const EmailSchema = z.object({
+    id: z.number().min(1, "Id requerida"),
+    email: z
+      .string()
+      .min(1, "Email required")
+      .email("Invalid email")
+      .max(150, "Max 150 characters"),
+  });
+
+export {addProjectSchema, idSchema , EmailSchema}
