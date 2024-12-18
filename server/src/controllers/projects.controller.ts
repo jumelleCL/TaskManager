@@ -219,7 +219,6 @@ const addMembersByEmail: RequestHandler = async (req, res) => {
 
   const { success, data, error } = EmailSchema.safeParse(email);
   if (!success) throw new ValidationError(error);
-  console.log(dataId, data);
   
 
   try {
@@ -246,6 +245,7 @@ const addMembersByEmail: RequestHandler = async (req, res) => {
 };
 const deleteMembersById: RequestHandler = async (req, res) => {
   const id = Number(req.params.id);
+  
 
   const {
     success: successId,
@@ -255,13 +255,11 @@ const deleteMembersById: RequestHandler = async (req, res) => {
   if (!successId) throw new ValidationError(errorId);
 
   const idMember = req.body.id;
-  console.log(idMember);
   
   
 
   const { success, data, error } = idSchema.safeParse(idMember);
   if (!success) throw new ValidationError(error);
-  console.log(projectId, data);
   
 
   try {

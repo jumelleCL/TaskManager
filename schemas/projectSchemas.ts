@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 const addProjectSchema = z.object({
     name: z.string().min(1, 'Title required').min(3, 'Title at least with 3 char'),
-    description: z.string().min(3, 'Description at least with 3 char').default(''),
+    description: z.string().default(''),
     // team_id: z.number().min(1,'Equipo requerido'),
     // start_date: z.string(),
     // end_date: z.string()

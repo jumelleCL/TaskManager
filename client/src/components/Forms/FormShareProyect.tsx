@@ -15,7 +15,7 @@ type FormValues = {
 };
 type Member = {
   email: string,
-  id: number, 
+  userId: number, 
   username: string,
   role: string
 }
@@ -70,6 +70,8 @@ const FormShareProyect = forwardRef<HTMLDialogElement, Props>(
         data:{
           id: idMember}
       }
+      console.log(idMember);
+      
       axiosApi.delete(`/api/projects/members/${id}`, dataDelete)
       .then((resp)=> {
         console.log(resp);
@@ -112,24 +114,26 @@ const FormShareProyect = forwardRef<HTMLDialogElement, Props>(
             className="mb-4 h-12"
           />
         </form>
-        <div className="flex flex-col ">
-          <span className="text-[1.2rem] bg-gray-primary pl-2">Members</span>
-          <span className="w-full border-t border-black mb-2"></span>
-        </div>
-
-        <div className="flex flex-col overflow-y-scroll max-h-[10rem] mx-4">
-          {members?.filter((member) => member.role !== "admin").map((member) => (
-            <div key={member.id} className="flex flex-col">
-              <div className="flex items-center justify-between">
-                <span className="text-[1.2rem] font-normal">
-                  {member.email}
-                </span>{" "}
-                <Button onClick={() => handleDelete(member.id)}><FaTrash size={20} className="text-red-danger" /></Button>
+        { members && members?.length > 1 && <>
+          <div className="flex flex-col ">
+            <span className="text-[1.2rem] bg-gray-primary pl-2">Members</span>
+            <span className="w-full border-t border-black mb-2"></span>
+          </div>
+  
+          <div className="flex flex-col overflow-y-scroll max-h-[10rem] mx-4">
+            {members?.filter((member) => member.role !== "admin").map((member) => (
+              <div key={member.userId} className="flex flex-col">
+                <div className="flex items-center justify-between">
+                  <span className="text-[1.2rem] font-normal">
+                    {member.email}
+                  </span>{" "}
+                  <Button onClick={() => handleDelete(member.userId)}><FaTrash size={20} className="text-red-danger" /></Button>
+                </div>
+                <span className="w-full border-t border-black my-2"></span>
               </div>
-              <span className="w-full border-t border-black my-2"></span>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </>}
       </dialog>
     );
   }
