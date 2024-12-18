@@ -74,6 +74,9 @@ export default function ProyectTask() {
                 className="relative group"
               >
                 <FaRegEdit color="white" />
+                <span className="absolute left-1/2 transform -translate-x-1/2 mt-2 text-sm text-white bg-gray-800 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+            Edit Project
+          </span>
               </Button>
 
               <FormShareProyect onNewMember={fetchMembers} ref={dialogRefShare} />
@@ -82,6 +85,9 @@ export default function ProyectTask() {
                 className="relative group"
               >
                 <FaRegShareSquare color="white" />
+                <span className="absolute left-1/2 transform -translate-x-1/2 mt-2 text-sm text-white bg-gray-800 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+            Share
+          </span>
               </Button>
             </div>
           )}
