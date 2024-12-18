@@ -39,9 +39,7 @@ export default function ProyectTask() {
       })
       .finally(() => setLoading(false));
   };
-
-  useEffect(() => {
-    fetchProject();
+  const fetchMembers = () => {
     axiosApi
       .get(`/api/projects/members/${id}`)
       .then((resp) => setMembers(resp.data))
@@ -49,6 +47,12 @@ export default function ProyectTask() {
         console.error(e.response.data.message);
         if (e.response.status === 401) userContext.logOut();
       });
+
+  }
+
+  useEffect(() => {
+    fetchProject();
+    fetchMembers();
   }, []);
 
   return (
@@ -72,7 +76,7 @@ export default function ProyectTask() {
                 <FaRegEdit color="white" />
               </Button>
 
-              <FormShareProyect ref={dialogRefShare} />
+              <FormShareProyect onNewMember={fetchMembers} ref={dialogRefShare} />
               <Button
                 onClick={() => dialogRefShare.current?.showModal()}
                 className="relative group"

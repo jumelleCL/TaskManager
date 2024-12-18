@@ -2,11 +2,11 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useUserContext from "../../hooks/UseUserContext";
 import { AddUserSchema } from "../../../../schemas/userSchemas";
 import axiosApi from "../../config/axiosApi";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { z } from "zod";
+import { useNavigate } from "react-router";
 
 type RegisterValues = {
   username: string;
@@ -23,26 +23,23 @@ export default function FormRegister() {
   const { errors, isValid } = formState;
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const userContext = useUserContext();  
   const [showPassword, setShowPassword] = useState(false);
 
   const handleShowPSW = () => {
     setShowPassword(!showPassword); 
   };
 
+  const nav = useNavigate();
   const handleRegister = () => {
     const data = {
       username: watch("username"),
       email: watch("email"),
       password: watch("password"),
     };
-
     axiosApi
       .post("/api/users/register", data)
-      .then((resp) => {
-        if (resp.data && resp.data.name) {
-          userContext.logIn(resp.data.name);
-        }
+      .then(() => {
+        nav('/login')
       })
       .catch((err) => {
         console.error(err.response?.data?.message || "Registration error");

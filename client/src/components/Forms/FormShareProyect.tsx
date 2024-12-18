@@ -21,10 +21,11 @@ type Member = {
 }
 type Props = {
   className?: string[];
+  onNewMember?: () => void;
 };
 
 const FormShareProyect = forwardRef<HTMLDialogElement, Props>(
-  function FormProyect({ className }: Props, externalRef) {
+  function FormProyect({ className, onNewMember }: Props, externalRef) {
     const internalRef = useRef<HTMLDialogElement>(null);
     const refToUse =
       !externalRef || typeof externalRef === "function"
@@ -40,8 +41,8 @@ const FormShareProyect = forwardRef<HTMLDialogElement, Props>(
     const [members, setMembers] = useState<Member[]>();
     const getMembers = () => {
       axiosApi.get(`/api/projects/members/${id}`).then((resp) => {
-        console.log(resp.data);
         setMembers(resp.data);
+        if(onNewMember) onNewMember();
       });
     };
     useEffect(() => {
@@ -82,7 +83,7 @@ const FormShareProyect = forwardRef<HTMLDialogElement, Props>(
     return (
       <dialog
         ref={refToUse}
-        className={`rounded w-[80vw] pb-8 md:w-[60vw] border-primary ${className}`}
+        className={`rounded-3xl w-[80vw] pb-8 md:w-[50vw] border-primary ${className}`}
       >
         <div className="flex justify-between p-4 mb-8 bg-primary text-white">
           <h2>Share</h2>
@@ -116,7 +117,7 @@ const FormShareProyect = forwardRef<HTMLDialogElement, Props>(
         </form>
         { members && members?.length > 1 && <>
           <div className="flex flex-col ">
-            <span className="text-[1.2rem] bg-gray-primary pl-2">Members</span>
+            <span className="text-[1.2rem] bg-gray-primary pl-6">Members</span>
             <span className="w-full border-t border-black mb-2"></span>
           </div>
   
