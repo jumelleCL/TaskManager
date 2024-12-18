@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { and, eq, ilike } from "drizzle-orm";
+import { and, eq, ilike, not } from "drizzle-orm";
 import HttpError from "../models/HttpError";
 import db from "../Pool";
 import { addProjectSchema, EmailSchema, idSchema } from "./../schemas/projectSchemas";
@@ -58,7 +58,7 @@ const getAllMembers: RequestHandler = async (req, res) => {
 
   try {
     const result = await db
-      .select({ userId: users.id, username: users.name })
+      .select({ userId: users.id, username: users.name, role: usersjoinprojects.role, email: users.email })
       .from(users)
       .innerJoin(usersjoinprojects, eq(users.id, usersjoinprojects.userId))
       .innerJoin(projects, eq(projects.id, usersjoinprojects.projectId))
@@ -206,37 +206,81 @@ const editOne: RequestHandler = async (req, res) => {
 };
 
 const addMembersByEmail: RequestHandler = async (req, res) => {
-    const id = Number(req.params.id);
-    const {
-        success: successId,
-        data: dataId,
-        error: errorId,
-      } = idSchema.safeParse(id);
-      if (!successId) throw new ValidationError(errorId);
-    
-      const email = req.body;
-      const { success, data, error } = EmailSchema.safeParse(email);
-      if (!success) throw new ValidationError(error);
-  
-      try {
-          const userByEmail = await db
-            .select()
-            .from(users)
-            .where(eq(users.email, data.email));
-          
-          await db
-        .insert(usersjoinprojects)
-        .values({
-          role: "member",
-          projectId: dataId,
-          userId: userByEmail[0].id,
-        });
-  
-        } catch (e) {
-          console.log(e);
-          throw new HttpError(500, "Usuario no encontrado");
-        }
-        res.send({ message: 'Invitacion enviada' });
-  };
+  const id = Number(req.params.id);
 
-export { getAll, getOne, addOne, getAllMembers, editOne , addMembersByEmail };
+  const {
+    success: successId,
+    data: dataId,
+    error: errorId,
+  } = idSchema.safeParse(id);
+  if (!successId) throw new ValidationError(errorId);
+
+  const email = req.body;
+
+  const { success, data, error } = EmailSchema.safeParse(email);
+  if (!success) throw new ValidationError(error);
+  console.log(dataId, data);
+  
+
+  try {
+    const [userByEmail] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, data.email));
+      
+    if(!userByEmail) res.send({message: 'Invitacion enviada'})
+    else{
+    await db
+      .insert(usersjoinprojects)
+      .values({
+        role: "member",
+        projectId: dataId,
+        userId: userByEmail.id,
+      });}
+
+  } catch (e) {
+    console.log(e);
+    throw new HttpError(500, "Usuario no encontrado");
+  }
+  res.send({ message: 'Invitacion enviada' });
+};
+const deleteMembersById: RequestHandler = async (req, res) => {
+  const id = Number(req.params.id);
+
+  const {
+    success: successId,
+    data: projectId,
+    error: errorId,
+  } = idSchema.safeParse(id);
+  if (!successId) throw new ValidationError(errorId);
+
+  const idMember = req.body.id;
+  console.log(idMember);
+  
+  
+
+  const { success, data, error } = idSchema.safeParse(idMember);
+  if (!success) throw new ValidationError(error);
+  console.log(projectId, data);
+  
+
+  try {
+    const [userById] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, data));
+      
+    if(!userById) throw new HttpError(404, 'User not found')
+    else{
+    await db
+      .delete(usersjoinprojects)
+      .where(and(eq(usersjoinprojects.userId, userById.id), eq(usersjoinprojects.projectId, projectId)));}
+
+  } catch (e) {
+    console.log(e);
+    throw new HttpError(500, "User not found");
+  }
+  res.send({ message: 'Usuario eliminado' });
+};
+
+export { getAll, getOne, addOne, getAllMembers, editOne, addMembersByEmail, deleteMembersById };

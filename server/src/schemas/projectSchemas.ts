@@ -11,7 +11,6 @@ const addProjectSchema = z.object({
 const idSchema = z.number().min(1, 'Id requerida')
 
 const EmailSchema = z.object({
-    id: z.number().min(1, "Id requerida"),
     email: z
       .string()
       .min(1, "Email required")

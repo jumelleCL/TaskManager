@@ -8,6 +8,7 @@ import useUserContext from "../../hooks/UseUserContext";
 import { addProjectSchema } from "../../../../schemas/projectSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import BigInput from "../design/BigInput";
 
 type Props = {
   className?: string;
@@ -71,7 +72,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
       <div className="flex justify-between items-center mb-8">
         <h3 className="font-bold text-2xl">Create Project</h3>
         <Button
-          version="btn-primary"
+          version="btn-icon"
           onClick={() => refToUse.current?.close()}
           className="bg-transparent border-none p-0 m-0 flex items-center hover:bg-inherit hover:text-slate-950"
         >
@@ -93,7 +94,7 @@ const FormProyect = forwardRef<HTMLDialogElement, Props>(function FormProyect(
           maxLength={30}
           {...register("name")}
         />
-        <Input
+        <BigInput
           error={errors.description}
           validate
           type="text"

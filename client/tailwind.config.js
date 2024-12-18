@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        float: "float 6s ease-in-out infinite",
+              float: "float 6s ease-in-out infinite",
       },
       keyframes: {
         float: {
@@ -36,4 +36,4 @@ module.exports = {
     },
   },
   plugins: [],
-};
+}
